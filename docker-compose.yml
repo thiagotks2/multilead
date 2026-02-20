@@ -1,0 +1,51 @@
+services:
+
+  postgres:
+    image: postgres:15
+    command: >
+      bash -c "apt-get update &&
+               apt-get install -y postgresql-15-pgvector &&
+               docker-entrypoint.sh postgres"
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: multilead
+      POSTGRES_PASSWORD: multilead0000
+      POSTGRES_DB: multilead
+    ports:
+      - "5432:5432"
+    volumes:
+      - dck-pgdata-multilead:/var/lib/postgresql/data
+    networks:
+      - dck-multilead
+
+  multilead:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    container_name: multilead
+    ports:
+      - "80:80"
+      - "3000:3000"
+      - "3001:3001"
+      - "5173:5173"
+      - "8080:8080"
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/default.conf:/etc/nginx/http.d/default.conf
+      - ./docker/logs/nginx:/var/log/nginx
+    tty: true
+    stdin_open: true
+    depends_on:
+      - postgres
+    networks:
+      - dck-multilead
+
+networks:
+  dck-multilead:
+    driver: bridge
+
+volumes:
+  dck-pgdata-multilead:
+    driver: local
