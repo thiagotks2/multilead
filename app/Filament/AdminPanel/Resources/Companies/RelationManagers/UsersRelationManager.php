@@ -97,13 +97,12 @@ class UsersRelationManager extends RelationManager
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->modalHeading('Novo Usuário')
-                    ->label('Novo Usuário'),
+                    ->modalHeading('New User'),
             ])
             ->actions([
                 ActionGroup::make([
                     Action::make('toggle_user_active')
-                        ->label(fn ($record) => $record->active ? 'Restringir acesso' : 'Permitir acesso')
+                        ->label(fn ($record) => $record->active ? 'Deny access' : 'Allow access')
                         ->icon(fn ($record) => $record->active ? 'heroicon-m-x-circle' : 'heroicon-m-check-circle')
                         ->color(fn ($record) => $record->active ? 'gray' : 'success')
                         ->action(fn ($record) =>
@@ -118,7 +117,7 @@ class UsersRelationManager extends RelationManager
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('activate')
-                        ->label('Permitir acesso')
+                        ->label('Allow access')
                         ->icon('heroicon-m-play')
                         ->color('success')
                         ->action(fn (Collection $records) =>
@@ -127,7 +126,7 @@ class UsersRelationManager extends RelationManager
                         ->requiresConfirmation(),
 
                     BulkAction::make('deactivate')
-                        ->label('Restringir acesso')
+                        ->label('Deny access')
                         ->icon('heroicon-m-stop')
                         ->color('gray')
                         ->action(fn (Collection $records) =>
@@ -136,7 +135,7 @@ class UsersRelationManager extends RelationManager
                         ->requiresConfirmation(),
 
                     BulkAction::make('delete')
-                        ->label('Excluir')
+                        ->label('Delete')
                         ->icon('heroicon-m-trash')
                         ->color('danger')
                         ->action(fn (Collection $records) =>
