@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use App\Contracts\MessageParticipant;
-use App\Enums\MessageParticipantType;
 use Illuminate\Support\Str;
 
-use App\Models\PromentorClient;
+use App\Models\Company;
 use App\Models\Agent;
 
-use Spatie\Permission\Traits\HasRoles;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -22,16 +19,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
-use Filament\Models\Contracts\HasAvatar;
-
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, MessageParticipant
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
-    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -70,39 +64,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MessagePa
         ];
     }
 
-    public function promentorClient(): BelongsTo
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(PromentorClient::class);
-    }
-
-    public function agents(): HasMany
-    {
-        return $this->hasMany(Agent::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
-    }
-
-    public function getFilamentAvatarUrl(): ?string
-    {
-        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
-        return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
-    }
-
-    public function getMessageType(): MessageParticipantType
-    {
-        return MessageParticipantType::User;
-    }
-
-    public function getMessageDisplayName(): string
-    {
-        return $this->name;
-    }
-
-    public function getMessageHandle(): string
-    {
-        return $this->name ? '@' . Str::of($this->name)->ascii()->lower()->replaceMatches('/[^a-z0-9\s]/', '')->camel() : '@lead';
     }
 }

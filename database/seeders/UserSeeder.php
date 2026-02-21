@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
+            'active' => true,
             'name' => 'User 1',
             'company_id' => 1,
             'email' => 'user@user.com',
