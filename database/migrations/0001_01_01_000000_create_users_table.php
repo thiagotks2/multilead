@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
+            $table->boolean('active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });
