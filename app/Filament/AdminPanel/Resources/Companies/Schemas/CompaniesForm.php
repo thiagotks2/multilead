@@ -3,15 +3,11 @@
 namespace App\Filament\AdminPanel\Resources\Companies\Schemas;
 
 use App\Enums\DocumentType;
-
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
 
 class CompaniesForm
 {
@@ -19,12 +15,12 @@ class CompaniesForm
     {
         return $schema
             ->components([
-                Section::make('Identificação do ClienteA')
+                Section::make('Client Identification')
                     ->afterHeader([
                         Toggle::make('active')
-                        ->default(true)
+                            ->default(true),
                     ])
-                    ->description('Principais informaçoes')
+                    ->description('Principal Informations')
                     ->schema([
                         TextInput::make('name')
                             ->columnSpanFull()
@@ -36,7 +32,7 @@ class CompaniesForm
                         TextInput::make('document_number')
                             ->required(),
                     ])->columns(2),
-                Section::make('Informaçoes de Contato')
+                Section::make('Contact Information')
                     ->schema([
                         TextInput::make('email')
                             ->required()
