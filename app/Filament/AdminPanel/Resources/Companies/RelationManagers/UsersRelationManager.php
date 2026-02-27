@@ -2,33 +2,23 @@
 
 namespace App\Filament\AdminPanel\Resources\Companies\RelationManagers;
 
-use App\Enums\AgentBlackoutType;
-use App\Enums\Weekday;
-
-use Carbon\Carbon;
-
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
-use Filament\Actions\CreateAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
-use Illuminate\Database\Eloquent\Collection;
-
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 class UsersRelationManager extends RelationManager
 {
@@ -41,37 +31,36 @@ class UsersRelationManager extends RelationManager
                 Section::make('Users')
                     ->schema([
                         Select::make('company_id')
-                    ->label('Company')
-                    ->relationship('company', 'name')
-                    ->searchable()
-                    ->required(),
-                TextInput::make('name')
-                    ->required(),
-                TextInput::make('email')
-                    ->label('Login email')
-                    ->email()
-                    ->required(),
-                TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->hiddenOn('edit'),
-                TextInput::make('phone')
-                    ->tel(),
-                Toggle::make('active')
-                    ->required()->default(true),
+                            ->label('Company')
+                            ->relationship('company', 'name')
+                            ->searchable()
+                            ->required(),
+                        TextInput::make('name')
+                            ->required(),
+                        TextInput::make('email')
+                            ->label('Login email')
+                            ->email()
+                            ->required(),
+                        TextInput::make('password')
+                            ->password()
+                            ->required()
+                            ->hiddenOn('edit'),
+                        TextInput::make('phone')
+                            ->tel(),
+                        Toggle::make('active')
+                            ->required()->default(true),
                     ])
                     ->columns(1)
                     ->columnSpanFull(),
             ]);
     }
 
-
     public function table(Table $table): Table
     {
         return $table
             ->paginated(false)
             ->heading('Users')
-            ->description('Manage users associated to this client.')
+            ->description('Manage users associated to this company')
             ->columns([
                 TextColumn::make('name')
                     ->sortable()
@@ -105,8 +94,7 @@ class UsersRelationManager extends RelationManager
                         ->label(fn ($record) => $record->active ? 'Deny access' : 'Allow access')
                         ->icon(fn ($record) => $record->active ? 'heroicon-m-x-circle' : 'heroicon-m-check-circle')
                         ->color(fn ($record) => $record->active ? 'gray' : 'success')
-                        ->action(fn ($record) =>
-                            $record->update(['active' => ! $record->active])
+                        ->action(fn ($record) => $record->update(['active' => ! $record->active])
                         )
                         ->requiresConfirmation(),
 
@@ -120,8 +108,7 @@ class UsersRelationManager extends RelationManager
                         ->label('Allow access')
                         ->icon('heroicon-m-play')
                         ->color('success')
-                        ->action(fn (Collection $records) =>
-                            $records->each->update(['active' => true])
+                        ->action(fn (Collection $records) => $records->each->update(['active' => true])
                         )
                         ->requiresConfirmation(),
 
@@ -129,8 +116,7 @@ class UsersRelationManager extends RelationManager
                         ->label('Deny access')
                         ->icon('heroicon-m-stop')
                         ->color('gray')
-                        ->action(fn (Collection $records) =>
-                            $records->each->update(['active' => false])
+                        ->action(fn (Collection $records) => $records->each->update(['active' => false])
                         )
                         ->requiresConfirmation(),
 
@@ -138,8 +124,7 @@ class UsersRelationManager extends RelationManager
                         ->label('Delete')
                         ->icon('heroicon-m-trash')
                         ->color('danger')
-                        ->action(fn (Collection $records) =>
-                            $records->each->delete()
+                        ->action(fn (Collection $records) => $records->each->delete()
                         )
                         ->requiresConfirmation(),
                 ]),

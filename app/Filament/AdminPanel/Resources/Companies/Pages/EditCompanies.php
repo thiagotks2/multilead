@@ -25,4 +25,9 @@ class EditCompanies extends EditRecord
     {
         return true;
     }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Company Info';
+    }
 }
