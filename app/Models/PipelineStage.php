@@ -17,6 +17,7 @@ class PipelineStage extends Model
         'pipeline_id',
         'name',
         'color',
+        'is_default',
         'order_column',
     ];
 

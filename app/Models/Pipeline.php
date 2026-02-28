@@ -16,6 +16,7 @@ class Pipeline extends Model
     protected $fillable = [
         'company_id',
         'name',
+        'is_default',
     ];
 
     public function company(): BelongsTo
