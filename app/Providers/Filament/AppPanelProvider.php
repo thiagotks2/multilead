@@ -32,6 +32,9 @@ class AppPanelProvider extends PanelProvider
             ->path('app')
             ->authGuard('user')
             ->login()
+            ->sidebarCollapsibleOnDesktop()
+            ->spa(hasPrefetching: true)
+            ->brandName('Multilead')
             ->tenant(Company::class)
             ->tenantMenu(false)
             ->colors([
@@ -76,5 +79,13 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+    }
+
+    public function boot(): void
+    {
+        \Filament\Support\Facades\FilamentIcon::register([
+            'panels::sidebar.collapse-button' => 'heroicon-o-bars-3',
+            'panels::sidebar.expand-button' => 'heroicon-o-bars-3',
+        ]);
     }
 }
