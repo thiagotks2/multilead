@@ -41,8 +41,24 @@ class SiteForm
                                 Textarea::make('default_meta_keywords')
                                     ->columnSpanFull(),
                                 TextInput::make('canonical_url')
-                                    ->url()
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(function (?string $state, \Filament\Schemas\Components\Utilities\Set $set) {
+                                        if (blank($state)) {
+                                            return;
+                                        }
+
+                                        $url = $state;
+                                        if (! str_starts_with($url, 'http://') && ! str_starts_with($url, 'https://')) {
+                                            $url = 'https://'.$url;
+                                        }
+
+                                        if (! str_ends_with($url, '/')) {
+                                            $url .= '/';
+                                        }
+
+                                        $set('canonical_url', $url);
+                                    }),
                             ]),
 
                         Tab::make('Scripts')
