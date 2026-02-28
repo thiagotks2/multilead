@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             SiteSeeder::class,
             UserSeeder::class,
+            LeadSourceSeeder::class,
         ]);
     }
 }
