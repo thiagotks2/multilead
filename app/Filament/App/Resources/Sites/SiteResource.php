@@ -25,6 +25,12 @@ class SiteResource extends Resource
 
     public static function getNavigationLabel(): string
     {
+        $tenant = filament()->getTenant();
+
+        if ($tenant && $tenant->sites()->count() > 1) {
+            return 'My Sites';
+        }
+
         return 'Settings';
     }
 
