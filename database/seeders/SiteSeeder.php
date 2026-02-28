@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\SiteStatus;
 use App\Models\Company;
 use App\Models\Site;
 use Illuminate\Database\Seeder;
@@ -13,18 +14,20 @@ class SiteSeeder extends Seeder
      */
     public function run(): void
     {
-        $company = Company::first();
+        $company1 = Company::find(1);
+        if ($company1) {
+            Site::firstOrCreate(
+                ['name' => 'Main Website C1', 'company_id' => $company1->id],
+                ['canonical_url' => 'company1.com', 'status' => SiteStatus::Production]
+            );
+        }
 
-        if ($company) {
-            Site::create([
-                'company_id' => $company->id,
-                'name' => 'Site Principal - '.$company->name,
-                'status' => \App\Enums\SiteStatus::Development,
-                'visual_settings' => [],
-                'default_meta_title' => $company->name,
-                'default_meta_description' => 'Bem-vindo ao site principal da '.$company->name,
-                'mail_default_recipient' => 'contato@'.strtolower(str_replace(' ', '', $company->name)).'.com',
-            ]);
+        $company2 = Company::find(2);
+        if ($company2) {
+            Site::firstOrCreate(
+                ['name' => 'Main Website C2', 'company_id' => $company2->id],
+                ['canonical_url' => 'company2.com', 'status' => SiteStatus::Production]
+            );
         }
     }
 }
