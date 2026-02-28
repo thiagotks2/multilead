@@ -33,6 +33,7 @@ class AppPanelProvider extends PanelProvider
             ->authGuard('user')
             ->login()
             ->tenant(Company::class)
+            ->tenantMenu(false)
             ->colors([
                 'primary' => Color::Amber,
             ])

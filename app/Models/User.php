@@ -4,15 +4,18 @@ namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
@@ -72,6 +75,16 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         }
 
         return true;
+    }
+
+    public function getTenants(Panel $panel): array|Collection
+    {
+        return $this->company ? [$this->company] : [];
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->company_id === $tenant->id;
     }
 
     public function getFilamentAvatarUrl(): ?string
