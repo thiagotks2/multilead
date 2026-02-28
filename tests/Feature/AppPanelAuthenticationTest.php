@@ -13,19 +13,19 @@ class AppPanelAuthenticationTest extends TestCase
 
     public function test_active_user_in_active_company_can_access_app_panel(): void
     {
-        $company = Company::create(['name' => 'Test Company', 'active' => true]);
+        $company = Company::factory()->create();
         $user = User::factory()->create([
             'company_id' => $company->id,
             'active' => true,
         ]);
 
-        $response = $this->actingAs($user, 'user')->get('/app');
+        $response = $this->actingAs($user, 'user')->get('/app/' . $company->id);
         $response->assertStatus(200);
     }
 
     public function test_inactive_user_cannot_access_app_panel(): void
     {
-        $company = Company::create(['name' => 'Test Company', 'active' => true]);
+        $company = Company::factory()->create(['active' => true]);
         $user = User::factory()->create([
             'company_id' => $company->id,
             'active' => false,
@@ -37,7 +37,7 @@ class AppPanelAuthenticationTest extends TestCase
 
     public function test_active_user_in_inactive_company_cannot_access_app_panel(): void
     {
-        $company = Company::create(['name' => 'Test Company', 'active' => false]);
+        $company = Company::factory()->create(['active' => false]);
         $user = User::factory()->create([
             'company_id' => $company->id,
             'active' => true,
@@ -49,7 +49,7 @@ class AppPanelAuthenticationTest extends TestCase
 
     public function test_user_cannot_access_admin_panel(): void
     {
-        $company = Company::create(['name' => 'Test Company', 'active' => true]);
+        $company = Company::factory()->create(['active' => true]);
         $user = User::factory()->create([
             'company_id' => $company->id,
             'active' => true,
