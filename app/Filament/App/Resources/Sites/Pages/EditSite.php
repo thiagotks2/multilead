@@ -3,9 +3,6 @@
 namespace App\Filament\App\Resources\Sites\Pages;
 
 use App\Filament\App\Resources\Sites\SiteResource;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\ForceDeleteAction;
-use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditSite extends EditRecord
@@ -15,9 +12,7 @@ class EditSite extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
-            ForceDeleteAction::make(),
-            RestoreAction::make(),
+            //
         ];
     }
 }
