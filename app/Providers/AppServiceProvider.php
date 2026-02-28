@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Company;
+use App\Observers\CompanyObserver;
 use Illuminate\Support\ServiceProvider;
 use Joaopaulolndev\FilamentEditProfile\Livewire\BrowserSessionsForm;
 use Joaopaulolndev\FilamentEditProfile\Livewire\CustomFieldsForm;
@@ -34,5 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Livewire::component('custom_fields_form', CustomFieldsForm::class);
         Livewire::component('sanctum_tokens', SanctumTokens::class);
         Livewire::component('multi_factor_authentication', MultiFactorAuthentication::class);
+
+        Company::observe(CompanyObserver::class);
     }
 }

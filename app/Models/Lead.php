@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Company;
+use App\Models\LeadSource;
+use App\Models\User;
+use App\Models\PipelineStage;
 
 class Lead extends Model
 {
