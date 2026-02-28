@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\Company;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -31,6 +32,7 @@ class AppPanelProvider extends PanelProvider
             ->path('app')
             ->authGuard('user')
             ->login()
+            ->tenant(Company::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -46,6 +48,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentEditProfilePlugin::make()
+                    ->shouldRegisterNavigation(false)
                     ->shouldShowAvatarForm(
                         value: true,
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars
