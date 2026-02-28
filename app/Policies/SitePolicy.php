@@ -28,7 +28,9 @@ class SitePolicy
      */
     public function create(Authenticatable $user): bool
     {
-        return true;
+        $panel = filament()->getCurrentPanel();
+
+        return ! ($panel && $panel->getId() === 'app');
     }
 
     /**
