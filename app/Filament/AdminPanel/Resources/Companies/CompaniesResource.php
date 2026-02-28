@@ -38,6 +38,7 @@ class CompaniesResource extends Resource
     {
         return [
             RelationManagers\UsersRelationManager::class,
+            RelationManagers\SitesRelationManager::class,
         ];
     }
 

@@ -3,14 +3,14 @@
 namespace App\Policies;
 
 use App\Models\Site;
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class SitePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(Authenticatable $user): bool
     {
         return true;
     }
@@ -18,7 +18,7 @@ class SitePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Site $site): bool
+    public function view(Authenticatable $user, Site $site): bool
     {
         return true;
     }
@@ -26,7 +26,7 @@ class SitePolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(Authenticatable $user): bool
     {
         return true;
     }
@@ -34,7 +34,7 @@ class SitePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Site $site): bool
+    public function update(Authenticatable $user, Site $site): bool
     {
         return true;
     }
@@ -42,7 +42,7 @@ class SitePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Site $site): bool
+    public function delete(Authenticatable $user, Site $site): bool
     {
         $panel = filament()->getCurrentPanel();
 
@@ -52,7 +52,7 @@ class SitePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Site $site): bool
+    public function restore(Authenticatable $user, Site $site): bool
     {
         $panel = filament()->getCurrentPanel();
 
@@ -62,7 +62,7 @@ class SitePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Site $site): bool
+    public function forceDelete(Authenticatable $user, Site $site): bool
     {
         $panel = filament()->getCurrentPanel();
 

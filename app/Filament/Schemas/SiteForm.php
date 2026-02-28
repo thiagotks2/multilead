@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\App\Resources\Sites\Schemas;
+namespace App\Filament\Schemas;
 
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
