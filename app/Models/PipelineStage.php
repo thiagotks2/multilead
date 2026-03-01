@@ -7,13 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Pipeline;
-use App\Models\Lead;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class PipelineStage extends Model
 {
     /** @use HasFactory<\Database\Factories\PipelineStageFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('pipeline_stage')
+            ->tap(function (\Spatie\Activitylog\Models\Activity $activity) {
+                if (isset($activity->subject->pipeline->company_id)) {
+                    $activity->company_id = $activity->subject->pipeline->company_id;
+                }
+            });
+    }
 
     protected $fillable = [
         'pipeline_id',

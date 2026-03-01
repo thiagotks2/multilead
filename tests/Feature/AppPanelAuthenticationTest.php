@@ -19,7 +19,7 @@ class AppPanelAuthenticationTest extends TestCase
             'active' => true,
         ]);
 
-        $response = $this->actingAs($user, 'user')->get('/app/' . $company->id);
+        $response = $this->actingAs($user, 'user')->get('/app/'.$company->id);
         $response->assertStatus(200);
     }
 

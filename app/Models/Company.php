@@ -7,13 +7,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Pipeline;
-use App\Models\Site;
-use App\Models\User;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('company')
+            ->tap(function (\Spatie\Activitylog\Models\Activity $activity) {
+                if (isset($activity->subject->id)) {
+                    $activity->company_id = $activity->subject->id; // For Company, the ID itself is the company_id
+                }
+            });
+    }
 
     protected $fillable = [
         'name',
