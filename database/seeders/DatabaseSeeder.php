@@ -20,11 +20,14 @@ class DatabaseSeeder extends Seeder
                 AdminSeeder::class,
                 CompanySeeder::class,
                 SiteSeeder::class,
+                SiteBannerPlaceSeeder::class,
+                DevSiteBannerPlaceSeeder::class,
                 UserSeeder::class,
                 LeadSourceSeeder::class,
                 DevLeadSourceSeeder::class,
                 DevPipelineSeeder::class,
                 DevLeadSeeder::class,
+                DevBlogSeeder::class,
             ]);
         }
 
@@ -32,6 +35,7 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 AdminSeeder::class,
                 LeadSourceSeeder::class,
+                SiteBannerPlaceSeeder::class,
             ]);
         }
     }
