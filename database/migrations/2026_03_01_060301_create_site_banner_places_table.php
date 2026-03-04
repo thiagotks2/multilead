@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('site_banner_places', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('site_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('description')->nullable();
             $table->timestamps();
