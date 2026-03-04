@@ -20,12 +20,14 @@ class Site extends Model
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->useLogName('site')
-            ->tap(function (\Spatie\Activitylog\Models\Activity $activity) {
-                if (isset($activity->subject->company_id)) {
-                    $activity->company_id = $activity->subject->company_id;
-                }
-            });
+            ->useLogName('site');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
+    {
+        if (isset($activity->subject->company_id)) {
+            $activity->company_id = $activity->subject->company_id;
+        }
     }
 
     protected $fillable = [
@@ -68,5 +70,20 @@ class Site extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function bannerPlaces(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SiteBannerPlace::class);
+    }
+
+    public function postCategories(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SitePostCategory::class);
+    }
+
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SitePost::class);
     }
 }

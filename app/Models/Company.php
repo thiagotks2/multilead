@@ -20,12 +20,14 @@ class Company extends Model
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->useLogName('company')
-            ->tap(function (\Spatie\Activitylog\Models\Activity $activity) {
-                if (isset($activity->subject->id)) {
-                    $activity->company_id = $activity->subject->id; // For Company, the ID itself is the company_id
-                }
-            });
+            ->useLogName('company');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
+    {
+        if (isset($activity->subject->id)) {
+            $activity->company_id = $activity->subject->id; // For Company, the ID itself is the company_id
+        }
     }
 
     protected $fillable = [

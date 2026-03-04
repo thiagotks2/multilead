@@ -10,10 +10,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Pipeline extends Model
+class SiteBannerPlace extends Model
 {
-    /** @use HasFactory<\Database\Factories\PipelineFactory> */
+    /** @use HasFactory<\Database\Factories\SiteBannerPlaceFactory> */
     use HasFactory, LogsActivity, SoftDeletes;
+
+    protected $fillable = [
+        'site_id',
+        'name',
+        'description',
+    ];
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -21,29 +27,23 @@ class Pipeline extends Model
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->useLogName('pipeline');
+            ->useLogName('site_banner_place');
     }
 
     public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
     {
-        if (isset($activity->subject->company_id)) {
-            $activity->company_id = $activity->subject->company_id;
+        if (isset($activity->subject->site->company_id)) {
+            $activity->company_id = $activity->subject->site->company_id;
         }
     }
 
-    protected $fillable = [
-        'company_id',
-        'name',
-        'is_default',
-    ];
-
-    public function company(): BelongsTo
+    public function site(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Site::class);
     }
 
-    public function stages(): HasMany
+    public function banners(): HasMany
     {
-        return $this->hasMany(PipelineStage::class)->orderBy('order_column');
+        return $this->hasMany(SiteBanner::class);
     }
 }

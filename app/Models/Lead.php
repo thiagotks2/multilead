@@ -21,12 +21,14 @@ class Lead extends Model
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->useLogName('lead')
-            ->tap(function (\Spatie\Activitylog\Models\Activity $activity) {
-                if (isset($activity->subject->company_id)) {
-                    $activity->company_id = $activity->subject->company_id;
-                }
-            });
+            ->useLogName('lead');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
+    {
+        if (isset($activity->subject->company_id)) {
+            $activity->company_id = $activity->subject->company_id;
+        }
     }
 
     protected $fillable = [

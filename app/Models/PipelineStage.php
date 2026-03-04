@@ -21,12 +21,14 @@ class PipelineStage extends Model
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->useLogName('pipeline_stage')
-            ->tap(function (\Spatie\Activitylog\Models\Activity $activity) {
-                if (isset($activity->subject->pipeline->company_id)) {
-                    $activity->company_id = $activity->subject->pipeline->company_id;
-                }
-            });
+            ->useLogName('pipeline_stage');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
+    {
+        if (isset($activity->subject->pipeline->company_id)) {
+            $activity->company_id = $activity->subject->pipeline->company_id;
+        }
     }
 
     protected $fillable = [

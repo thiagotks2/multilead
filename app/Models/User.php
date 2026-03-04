@@ -28,12 +28,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
             ->logAll()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->useLogName('user')
-            ->tap(function (\Spatie\Activitylog\Models\Activity $activity) {
-                if (isset($activity->subject->company_id)) {
-                    $activity->company_id = $activity->subject->company_id;
-                }
-            });
+            ->useLogName('user');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
+    {
+        if (isset($activity->subject->company_id)) {
+            $activity->company_id = $activity->subject->company_id;
+        }
     }
 
     /**
