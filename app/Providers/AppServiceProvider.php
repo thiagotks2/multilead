@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Company;
 use App\Observers\CompanyObserver;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Joaopaulolndev\FilamentEditProfile\Livewire\BrowserSessionsForm;
 use Joaopaulolndev\FilamentEditProfile\Livewire\CustomFieldsForm;
@@ -29,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Relation::morphMap([
+            'site_post_category' => \App\Models\SitePostCategory::class,
+        ]);
+
         Livewire::component('edit_profile_form', EditProfileForm::class);
         Livewire::component('edit_password_form', EditPasswordForm::class);
         Livewire::component('browser_sessions_form', BrowserSessionsForm::class);
