@@ -30,6 +30,7 @@ The topics below consolidate my engineering decisions adopted in this repository
 ### 3. Developer Experience (DX) and Standards
 - **Complete Fake Environment (Seeders/Factories):** All entities are covered by logically chained *factories*, making it possible to recreate everything from a simple database record to an entire populated scenario of users, leads, and rules in a single command.
 - **Absolute PSR-12 Standardization:** Natively integrated into the ecosystem via **Laravel Pint**, ensuring universal reading compliance across the entire *codebase*.
+- **Granular Documentation & Specs:** Every core feature is documented *before* implementation using a granular approach (Feature Docs). These documents serve as technical contracts, containing Gherkin-style scenarios and Mermaid diagrams, directly guiding the TDD cycle and ensuring that architecture and implementation are always in sync.
 
 ---
 
