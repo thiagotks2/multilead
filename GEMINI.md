@@ -352,6 +352,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 </code-snippet>
 
 ### Common Mistakes
+- Avoid to do thinks like "$company = \App\Models\Company::factory()->create();". Instead, you can do "use App\Models\Company;" and then "$company = Company::factory()->create();".
 
 **Commonly Incorrect Namespaces:**
 - Form fields (TextInput, Select, etc.): `Filament\Forms\Components\`
