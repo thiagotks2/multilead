@@ -50,7 +50,7 @@ We strictly avoid the "Fat Controller" anti-pattern and mandate thorough testing
 
 To bridge the gap between business requirements and technical implementation, we employ a **Granular Documentation** strategy located in `docs/features/`.
 
-- **MANDATORY TEMPLATE:** Every new feature specification must be based on the [000-feature-spec-template.md](./000-feature-spec-template.md).
+- **MANDATORY TEMPLATE:** Every new feature specification must be based on the [000-feature-spec-template.md](../features/000-feature-spec-template.md).
 - **Specification over Ambiguitiy:** No feature is built without a corresponding `.md` specification. Each doc contains Gherkin scenarios (Given/When/Then), Technical Specs (Hooks, Models, Guards), and Mermaid Sequence Diagrams.
 - **Contract-First Development:** These documents act as technical contracts. They prevent "vague implementations" by forcing the architect and developer to agree on logic flow, data boundaries, and failure cases before a single line of application code is written.
 - **Micro-Docs for Maintainability:** Instead of a single, monolithic (and often outdated) system manual, we maintain small, hyper-focused files. This makes it trivial to update documentation during refactoring and ensures that documentation evolves at the same pace as the code.

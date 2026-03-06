@@ -1,40 +1,57 @@
-# Multilead - Multi-Tenant CRM & Website Management
+# Multilead - Enterprise Multi-Tenant CRM & Real Estate Engine
 
-> **Note:** This repository is a practical portfolio project, developed to demonstrate my proficiency in software architecture, system design, and advanced backend development. The main focus is not just delivering a functional application, but writing clean, scalable, testable code grounded in the best practices of software engineering and the PHP ecosystem, applying software development best practices to solve real problems and needs of a real estate management business focused on sales, leads, and digital marketing.
-
-## Project Overview
-
-Multilead is a flexible **Multi-Tenancy** and CRM platform designed to manage customer relationships, lead automation, and features for multiple websites simultaneously — operating on a single codebase and a logically isolated database.
-
-The construction of this project aims to demonstrate and apply:
-- **High-Complexity Architectures:** Meticulous relational modeling with perfect isolation in the *multi-tenancy* model.
-- **Design Patterns & SOLID:** Responsible use of design patterns (Repository, Factory, Observer, among others) and strict adherence to SOLID principles, aiming for extremely high maintainability (high cohesion and low coupling), taking due care not to create unnecessary overengineering, focusing on fast and scalable solutions.
-- **Clean Code:** Clearly divided responsibilities, strict typing of objects and methods, focusing on the natural semantics of code readability.
-- **Strict Documentation Standards:** Every new feature MUST follow the [Feature Spec Template](./docs/features/000-feature-spec-template.md) before implementation starts.
-
-## Technical & Architectural Highlights
-
-The topics below consolidate my engineering decisions adopted in this repository:
-
-### 1. Architecture and Data Security
-- **Robust and Secure Multi-Tenancy:** The entire project handles the separation of tenant scopes. The strict hierarchy (Tenant/Company -> Branches/Sites -> Modules) shields the system against cross-tenant data leakage and orphaned records.
-- **Highly Modular Ecosystem:** Dynamic business models (such as Banners, Blogs, and Product Portfolios) operate with a modular architecture, allowing easy activation, deactivation, or extension of these entities smoothly according to each business's needs.
-- **Audit Trail:** Implementation and customization of the `Spatie ActivityLog` package to maintain the history of modifications ("before" and "after" the payload). Logs automatically map events to their respective *tenant*, regardless of the depth of child instances in the database.
-
-### 2. Technology Stack and Modern Tools
-- **PHP 8.2+:** Intentional exploration of modern language features, such as advanced typing, native enums, *readonly* properties, and *constructor property promotion*.
-- **Laravel 12:** The backend engine, aligned with the official documentation for adopting dynamic Providers, modernized routes, Form Requests (local injection), advanced Eloquent (polymorphic relationships), and native optimizations.
-- **Filament v4 & Livewire 3:** Deep utilization of FilamentPHP's *Server-Driven UI* (SDUI) architecture supported by Livewire's modern websockets. This enables reactive, componentized, and high-performance backend panels without taxing resources on isolated REST APIs/SPAs.
-- **PostgreSQL:** The main database for guaranteed manipulation of relational modeling combined with `JSONB` fields. Data with highly mutable keys and dynamic SEO configurations (Analytics, inserted headers) live in transactional metadata columns.
-- **Docker:** No manual dependencies on the host. 100% implemented in containers with strictly versioned and as lightweight images as possible.
-
-### 3. Developer Experience (DX) and Standards
-- **Complete Fake Environment (Seeders/Factories):** All entities are covered by logically chained *factories*, making it possible to recreate everything from a simple database record to an entire populated scenario of users, leads, and rules in a single command.
-- **Absolute PSR-12 Standardization:** Natively integrated into the ecosystem via **Laravel Pint**, ensuring universal reading compliance across the entire *codebase*.
-- **Granular Documentation & Specs:** Every core feature is documented *before* implementation using a granular approach (Feature Docs). These documents serve as technical contracts, containing Gherkin-style scenarios and Mermaid diagrams, directly guiding the TDD cycle and ensuring that architecture and implementation are always in sync.
+> **Engineering Note:** This repository is a high-level portfolio project designed to demonstrate advanced proficiency in software architecture, system design, and modern backend engineering. Beyond delivering a functional SaaS, the core objective is to showcase a **production-ready codebase** built on the pillars of scalability, maintainable patterns, and a strict Test-Driven Development (TDD) culture.
 
 ---
 
-## Differentiated Installation (Development Setup)
+## Architectural Philosophy: The Modular Monolith
 
-👉 [Read the Docs for Infrastructure & Setup Guide](./docs/infraestructure.md)
+Multilead is intentionally designed as a **Modular Monolith**. This strategic choice balances the simplicity of a single deployment unit with the decoupling benefits typically associated with microservices. 
+
+- **Domain-Driven Design (DDD) Influence:** Features like CRM, Blog, and Property Portfolios are treated as independent internal modules with high cohesion and low coupling.
+- **Microservices Ready:** The architecture is "extractable." High-throughput logic (like lead processing) is decoupled enough to be moved into standalone microservices with minimal friction if scaling demands shift.
+- **Dual-Panel Ecosystem:** Implements separate **Admin** and **App** panels. This mirrors real-world real estate operations, providing a clear boundary between internal back-office management and client-facing SaaS functionality.
+
+## The TALL Stack & Modern Product Engineering
+
+We utilize the **TALL Stack (Tailwind, Alpine.js, Laravel 12, Livewire 3)** augmented by **Filament v4**.
+
+- **Server-Driven UI (SDUI):** Leveraging Filament allows us to build complex, reactive interfaces entirely in PHP. This drastically reduces the overhead of maintaining decoupled SPAs and complex REST API state synchronization while delivering a high-performance, fluid UX.
+- **Product Velocity without Debt:** This stack is chosen for maximum engineering efficiency—reaching the market quickly without sacrificing the robustness of a server-rendered application.
+
+## Engineering Excellence & Quality Assurance
+
+Seniority is defined by the reliability of the code. This project enforces a **Testing-First** mindset:
+
+- **Strict TDD Cycle:** All business logic is driven by automated tests in `tests/`. We verify behavioral correctness before implementation, ensuring that complex multi-tenant relationships remain unbreakable during refactoring.
+- **Design Patterns in Practice:** Adopts **Services, Actions, and Observers** to avoid "Fat Controllers." We use strongly typed **Enums** for data boundaries and **Shared Schemas** in Filament to ensure strict DRY (Don't Repeat Yourself) compliance.
+- **PostgreSQL & JSONB:** Utilizing PostgreSQL's relational power combined with JSONB for flexible metadata, balancing structured data integrity with the agility needed for dynamic SEO and site configurations.
+
+## Documentation as Code
+
+Documentation is not an afterthought; it is a technical contract. Using a **Granular Documentation** strategy:
+- Every core feature follows a strict specification template (Gherkin scenarios + Mermaid diagrams) *before* the first line of code is written.
+- These specs align 1:1 with PHPUnit Feature Tests, creating a "living documentation" that stays in sync with the codebase.
+
+---
+
+## Getting Started (Development Setup)
+
+To quickly set up the containerized environment and see the engineering in action:
+
+[Infrastructure & Setup Guide](./docs/infraestructure.md)
+
+---
+
+## Deep Dive into the Architecture
+
+To explore the project's inner workings and access comprehensive documentation, please refer to:
+
+
+[/docs - Architecture Decisions & Feature Specs](./docs/architecture/architecture_decisions.md)
+
+---
+
+## 🤝 Let's Connect
+
+[Thiago Cardoso Silva - LinkedIn](https://www.linkedin.com/in/thiagocardososilva/)
