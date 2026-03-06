@@ -46,6 +46,16 @@ We strictly avoid the "Fat Controller" anti-pattern and mandate thorough testing
 - **Repositories / Services:** Controllers and Livewire components are lean; their only job is to handle requests and return responses. Heavy lifting is delegated to dedicated Service/Action classes.
 - **Observers & Events:** Side effects (like firing an email or logging an audit trail when a Lead is created) are handled via Eloquent Observers or event listeners. This adheres to the Single Responsibility Principle (SRP)—the logic that models the lead shouldn't care about the logging mechanism.
 
+## Granular Feature Documentation (Specifications as Code)
+
+To bridge the gap between business requirements and technical implementation, we employ a **Granular Documentation** strategy located in `docs/features/`.
+
+- **MANDATORY TEMPLATE:** Every new feature specification must be based on the [000-feature-spec-template.md](./000-feature-spec-template.md).
+- **Specification over Ambiguitiy:** No feature is built without a corresponding `.md` specification. Each doc contains Gherkin scenarios (Given/When/Then), Technical Specs (Hooks, Models, Guards), and Mermaid Sequence Diagrams.
+- **Contract-First Development:** These documents act as technical contracts. They prevent "vague implementations" by forcing the architect and developer to agree on logic flow, data boundaries, and failure cases before a single line of application code is written.
+- **Micro-Docs for Maintainability:** Instead of a single, monolithic (and often outdated) system manual, we maintain small, hyper-focused files. This makes it trivial to update documentation during refactoring and ensures that documentation evolves at the same pace as the code.
+- **Direct TDD Alignment:** The scenarios defined in these docs translate 1:1 into our PHPUnit Feature Tests, ensuring that what is documented is what is actually being verified by the CI/CD pipeline.
+
 ---
 
 ## Codebase Navigation: Where are things?
