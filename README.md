@@ -10,6 +10,7 @@ The construction of this project aims to demonstrate and apply:
 - **High-Complexity Architectures:** Meticulous relational modeling with perfect isolation in the *multi-tenancy* model.
 - **Design Patterns & SOLID:** Responsible use of design patterns (Repository, Factory, Observer, among others) and strict adherence to SOLID principles, aiming for extremely high maintainability (high cohesion and low coupling), taking due care not to create unnecessary overengineering, focusing on fast and scalable solutions.
 - **Clean Code:** Clearly divided responsibilities, strict typing of objects and methods, focusing on the natural semantics of code readability.
+- **Strict Documentation Standards:** Every new feature MUST follow the [Feature Spec Template](./docs/features/000-feature-spec-template.md) before implementation starts.
 
 ## Technical & Architectural Highlights
 
