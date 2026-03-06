@@ -52,6 +52,10 @@ class Admin extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        if ($panel->getId() === 'app') {
+            return false;
+        }
+
         return true;
     }
 }
