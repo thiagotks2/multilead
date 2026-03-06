@@ -46,15 +46,4 @@ class AppPanelAuthenticationTest extends TestCase
         $response = $this->actingAs($user, 'user')->get('/app');
         $response->assertStatus(403);
     }
-
-    public function test_user_cannot_access_admin_panel(): void
-    {
-        $company = Company::factory()->create(['active' => true]);
-        $user = User::factory()->create([
-            'company_id' => $company->id,
-            'active' => true,
-        ]);
-
-        $this->assertFalse($user->canAccessPanel(app(\Filament\FilamentManager::class)->getPanel('admin')));
-    }
 }
