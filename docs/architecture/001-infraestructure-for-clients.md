@@ -23,7 +23,7 @@ Adhering to system-wide standards, the `clients` table will implement `SoftDelet
     - `notes`: Text (For internal observations).
     - `user_id` (Nullable): Foreign Key referencing `users`. Indicates exclusivity.
     - `company_id` (Mandatory): Foreign Key referencing `companies`.
-    - `address_json`: JSONB object containing `[country, state, city, neighborhood, street, number, complement, zip_code]`.
+    - `address`: JSONB object containing `[country, state, city, neighborhood, street, number, complement, zip_code]`.
     - `profile_data`: JSONB object containing profiling metrics such as `[personal_income, family_income, purchase_intent, preferences]`.
     - `timestamps` & `soft_deletes`.
 
@@ -32,7 +32,7 @@ Adhering to system-wide standards, the `clients` table will implement `SoftDelet
 ## 3. Implementation (Laravel Standard)
 - **Model:** `Client`
 - **Traits:** `HasFactory`, `SoftDeletes`, `LogsActivity`.
-- **Casts:** Both `address_json` and `profile_data` must be cast to `AsArrayObject` or `AsCollection` to facilitate fluent attribute manipulation.
+- **Casts:** Both `address` and `profile_data` must be cast to `AsArrayObject` or `AsCollection` to facilitate fluent attribute manipulation.
 - **Relationships:**
     - `company()`: `BelongsTo`
     - `user()`: `BelongsTo` (Optional/Nullable)
