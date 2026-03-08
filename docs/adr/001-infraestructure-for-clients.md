@@ -1,7 +1,7 @@
 # ADR 001: Client Infrastructure
 
 ## Status
-Accepted
+Under Refactoring
 
 ## 1. Description
 A **Client** is a system entity representing an individual who has either engaged in past transactions or is projected to perform future high-intent actions with the company. 
@@ -66,3 +66,7 @@ erDiagram
     COMPANY ||--o{ CLIENT : "manages"
     USER ||--o{ CLIENT : "optionally owns"
 ```
+## 7. Modular Refactoring Plan
+- app/Models/Client.php → app/Modules/Clients/Models/Client.php
+- tests/Feature/ClientInfrastructureTest.php → tests/Feature/Modules/Clients/InfrastructureTest.php
+> Note: Remember to change de namespace in all the files and references on exitent Filament Panels, and run the tests, adapting them if necessary.
