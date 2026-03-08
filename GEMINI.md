@@ -368,27 +368,33 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 
 === multilead custom rules ===
 
-# Specific Multilead Architecture Rules
+# Multilead Master Rules: Pragmatic Modular Monolith
+## 1. Modular Structure (app/Modules/)
+- Bounded Contexts: Each domain resides in app/Modules/{ModuleName}/.
+- Contents: Models/, Events/, and Actions/.
+- Core: app/Core/ for module-agnostic logic only.
+- Enums: Use app/Enums/. No hardcoded strings.
 
-The following rules dictate the core decisions for this business model. As the AI Agent interacting with this codebase, you MUST prioritize and abide by them at all times.
+## 2. Pragmatic Action Pattern
+- CRUD: Use native Filament/Eloquent for standard CRUD.
+- Actions: Use ONLY for business logic, side effects, or complex workflows (e.g., Lead Distribution).
+- Location: app/Modules/{Module}/Actions/ with a single handle() method.
+- Models: Keep them thin. Focus on persistence and relationships.
 
-## 1. Test-Driven Development (TDD)
-- ALL new business logics or profound architectural changes MUST be made using a Test-Driven Development (TDD) approach. 
-- You must create or adjust PHPUnit tests inside the `tests/` directory BEFORE delivering the final implementation. Ensure edge cases and tenant-isolation limits are validated.
+## 3. Communication & Decoupling
+- No Cross-Writes: Modules must not write to another module's Database/Model.
+- Protocol: Inter-module communication via Domain Events or Public Actions.
+- Auditory: Ensure spatie/laravel-activitylog compliance.
 
-## 2. Architecture & Documentation Compliance
-- Always follow the Modular Monolith strategy detailed in the project's documentation (`docs/architecture/architecture_decisions.md`).
-- Before suggesting complex logic placement, refer to this documentation to ensure correct decoupling. DO NOT create "Fat Controllers". Use Services, Actions, and/or Observers.
+## 4. Filament UI Boundaries
+- Location: app/Filament/. Panels: Admin (Corporate) and App (Users/Agents).
+- Isolation: Never mix Admin/App resources.
+- DRY Schemas: Store reusable form/table components in app/Filament/Schemas/.
+- Logic: Resources invoke Actions only when business rules exceed basic CRUD.
 
-## 3. Strict Filament Boundaries & DRY Schemas
-- This system has TWO distinct Filament Service Providers: **Admin Panel** (for internal/corporate use) and **App Panel** (for end-users and real estate agents).
-- Never mix resources from Admin in App, nor vice-versa. Maintain total logical autonomy and security.
-- Reusable form/table features must be stored outside specific panel clusters, strictly inside `app/Filament/Schemas/` to follow the Don't Repeat Yourself (DRY) principle.
-
-## 4. Enums for Valid Data Boundaries
-- Always infer the Enums available in `app/Enums/` when dealing with data status, permissions, or types. NEVER use hardcoded raw strings for business states unless specifically instructed.
-
-## 5. Absolute PSR-12 Standardization via Pint
-- After writing or modifying `.php` files, you must recall that the project uses `Laravel Pint` strictly for PSR-12 formatting. Maintain high-level code semantics and cleanliness in everything you write.
+## 5. Quality & TDD (Red-Green-Refactor)
+- Test Location: Root tests/ directory, organized by module (e.g., tests/Feature/Modules/{Module}).
+- TDD: Write tests BEFORE implementing logic > CRUD.
+- Formatting: Strict PSR-12 via Laravel Pint.
 
 </laravel-boost-guidelines>
