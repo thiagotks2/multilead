@@ -5,12 +5,15 @@ namespace Database\Factories;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Modules\Clients\Models\Client;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Client>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\Clients\Models\Client>
  */
 class ClientFactory extends Factory
 {
+    protected $model = Client::class;
+
     /**
      * Define the model's default state.
      *
@@ -47,7 +50,7 @@ class ClientFactory extends Factory
     /**
      * Indicate that the client is exclusive to a user.
      */
-    public function exclusive(User $user = null): static
+    public function exclusive(?User $user = null): static
     {
         return $this->state(fn (array $attributes) => [
             'user_id' => $user->id ?? User::factory(),

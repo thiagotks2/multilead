@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\Clients\Models;
 
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -54,6 +54,11 @@ class Client extends Model
         if (isset($activity->subject->company_id)) {
             $activity->company_id = $activity->subject->company_id;
         }
+    }
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\ClientFactory::new();
     }
 
     public function company(): BelongsTo

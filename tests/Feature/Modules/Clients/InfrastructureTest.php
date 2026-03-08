@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature\Client;
+namespace Tests\Feature\Modules\Clients;
 
-use App\Models\Client;
 use App\Models\Company;
 use App\Models\User;
+use App\Modules\Clients\Models\Client;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ClientInfrastructureTest extends TestCase
+class InfrastructureTest extends TestCase
 {
     use RefreshDatabase;
 

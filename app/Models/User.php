@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Modules\Clients\Models\Client;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasTenants;
