@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
                 SiteBannerPlaceSeeder::class,
                 DevSiteBannerPlaceSeeder::class,
                 UserSeeder::class,
+                DevClientSeeder::class,
                 LeadSourceSeeder::class,
                 DevLeadSourceSeeder::class,
                 DevPipelineSeeder::class,
