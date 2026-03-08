@@ -27,6 +27,7 @@ Multilead is intentionally designed as a **Modular Monolith**. While microservic
 
 Instead, our approach embraces modularity *within* a single deployment unit:
 
+- **Domain Isolation:** We organize core business logic into app/Modules/. Each module is a Bounded Context containing its own Models, Events, and Actions. This prevents the "Big Ball of Mud" and makes the codebase scream its purpose.
 - **High Cohesion, Low Coupling:** Features (like CRM, Blog, and Banners) are treated as distinct internal modules. They communicate through well-defined interfaces or event-driven patterns rather than deep, tangled dependencies.
 - **Ready for Extraction:** Why modularize a monolith? Because different parts of a system have vastly different scaling and resource requirements. If, in the future, the 'Lead Processing' engine requires massive horizontal scaling due to high throughput, while the 'Admin Panel' only needs standard vertical scaling, the lead engine's code is already decoupled enough to be extracted into a standalone microservice with as minimal refactoring as possible.
 - **Team Topology:** As engineering teams grow, a modular monolith allows different squads to take ownership of specific domains (e.g., Squad CRM vs. Squad Websites) within the same repository without stepping on each other's toes, avoiding merge hell.
@@ -60,17 +61,22 @@ To bridge the gap between business requirements and technical implementation, we
 
 ## Codebase Navigation: Where are things?
 
-To maintain sanity in a growing codebase, the directory structure is heavily customized and organized by domain context where applicable, rather than strictly by file type.
+- app/Modules/: The heart of the application. Organized by domain (e.g., Clients, Leads).
 
-- `app/Enums/`: Strongly typed enumerations defining system constants (e.g., Lead Statuses, Role Types). They are used heavily to enforce valid data boundaries at the programmatic level.
-- `app/Models/`: Defines the Eloquent ORM representations and their complex relational mappings (polymorphic, multi-tenant scopes).
-- `app/Filament/`: Contains the entire Server-Driven UI logic, elegantly split between the respective `App` and `Admin` clusters.
-  - *Note on Schemas:* Certain form and table components are reused identically across different panels. These shared schemas are located directly in `app/Filament/Schemas/` (outside the scope of individual panels) to guarantee strict DRY (Don't Repeat Yourself) compliance.
-- `app/Observers/`: Where model lifecycle hooks are placed to keep models and controllers clean of side-effect logic.
-- `app/Policies/`: Authorization logic ensuring rigorous tenant-isolation checks before any action is permitted.
-- `database/migrations/`: The history of the database schema.
-- `database/seeders/` & `database/factories/`: The mock data generation engine, crucial for setting up the local Dev environment realistically.
-- `routes/`: Standard HTTP routing, split logically (e.g., `web.php` for site delivery, console routes).
-- `tests/`: Home of the automated testing suite. Because we use TDD, this directory dictates strict business rule verification through mock-injecting and unit/feature assertions.
-- `docker/`: Houses the Docker configurations dictating containerization bounds, creating a flawlessly reproducible runtime.
-- `docs/`: Where this and other architectural documentation reside.
+  - Actions/: Single-task classes orchestrating complex business logic (e.g., DistributeLeadToRoulette).
+
+  - Models/: Thin Eloquent models focused on persistence and relationships.
+
+  - Events/: Domain events for cross-module communication.
+
+- app/Core/: Shared, module-agnostic logic and base classes.
+
+- app/Enums/: Strongly typed constants for data boundaries.
+
+- app/Filament/: Server-Driven UI logic, split into App and Admin panels.
+
+  - Shared Schemas: Reusable UI components located in app/Filament/Schemas/ for DRY compliance.
+
+- app/Policies/: Security layer enforcing tenant and owner-based authorization.
+
+- tests/: Organized by module (e.g., tests/Feature/Modules/Clients), facilitating TDD and local module verification.

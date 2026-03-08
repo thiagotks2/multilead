@@ -6,11 +6,8 @@
 
 ## Architectural Philosophy: The Modular Monolith
 
-Multilead is intentionally designed as a **Modular Monolith**. This strategic choice balances the simplicity of a single deployment unit with the decoupling benefits typically associated with microservices. 
-
-- **Domain-Driven Design (DDD) Influence:** Features like CRM, Blog, and Property Portfolios are treated as independent internal modules with high cohesion and low coupling.
-- **Microservices Ready:** The architecture is "extractable." High-throughput logic (like lead processing) is decoupled enough to be moved into standalone microservices with minimal friction if scaling demands shift.
-- **Dual-Panel Ecosystem:** Implements separate **Admin** and **App** panels. This mirrors real-world real estate operations, providing a clear boundary between internal back-office management and client-facing SaaS functionality.
+- Domain-Driven Design (DDD) Influence: Features are treated as independent internal modules inside app/Modules/ with high cohesion. We utilize the Action Pattern to encapsulate complex workflows, keeping Models thin and the domain logic pure.
+- Event-Driven Decoupling: Modules communicate primarily through Domain Events, ensuring that a change in the 'Leads' module doesn't trigger a cascade of failures in 'Clients'.
 
 ## The TALL Stack & Modern Product Engineering
 
