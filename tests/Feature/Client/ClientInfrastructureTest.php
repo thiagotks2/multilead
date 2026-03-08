@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Client;
 
-use App\Models\Client; //does not yet exist
+use App\Models\Client;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\QueryException;
@@ -138,6 +138,28 @@ class ClientInfrastructureTest extends TestCase
             'subject_id' => $client->id,
             'subject_type' => Client::class,
             'description' => 'created',
+            'company_id' => $company->id,
+        ]);
+    }
+
+    /**
+     * Requirement: Integrity (Soft Deletes)
+     * Verifying that clients are soft deleted and can be restored.
+     */
+    public function test_clients_can_be_soft_deleted(): void
+    {
+        $company = Company::factory()->create();
+        $client = Client::factory()->create(['company_id' => $company->id]);
+
+        $client->delete();
+
+        $this->assertSoftDeleted('clients', ['id' => $client->id]);
+
+        $client->restore();
+
+        $this->assertDatabaseHas('clients', [
+            'id' => $client->id,
+            'deleted_at' => null,
         ]);
     }
 }
