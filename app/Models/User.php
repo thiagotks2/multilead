@@ -111,4 +111,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
 
         return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
     }
+
+    public function clients(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Client::class);
+    }
 }

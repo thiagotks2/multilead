@@ -64,4 +64,9 @@ class Company extends Model
     {
         return $this->hasMany(Pipeline::class);
     }
+
+    public function clients(): HasMany
+    {
+        return $this->hasMany(Client::class);
+    }
 }
