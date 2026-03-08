@@ -48,7 +48,18 @@ Adhering to system-wide standards, the `clients` table will implement `SoftDelet
 - [ ] **Integrity (Cross-Tenant):** Confirm that the same email can exist in two different companies without conflict.
 - [ ] **Observability:** Verify that an entry is recorded in the activity log upon every create/update event.
 
-## 5. Visual Domain Modeling
+## 5. Seeders & Factories
+To facilitate manual QA and UI demonstrations, local seed data is required. The implementation must include:
+
+- Factories: Capable of generating both global (company-only) and exclusive (user-assigned) clients.
+
+- Development Seeders: Prefixed with Dev (e.g., DevClientSeeder), these should populate the local environment with:
+
+    - At least one Company Client (Shared/Global).
+
+    - At least one Exclusive Client (Assigned to a specific user).
+
+## 6. Visual Domain Modeling
 
 ```mermaid
 erDiagram
