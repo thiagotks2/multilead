@@ -1,7 +1,7 @@
 # ADR 001: Client Infrastructure
 
 ## Status
-Proposed
+Accepted
 
 ## 1. Description
 A **Client** is a system entity representing an individual who has either engaged in past transactions or is projected to perform future high-intent actions with the company. 
