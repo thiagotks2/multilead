@@ -18,10 +18,10 @@ We utilize the **TALL Stack (Tailwind, Alpine.js, Laravel 12, Livewire 3)** augm
 
 ## Engineering Excellence & Quality Assurance
 
-Seniority is defined by the reliability of the code. This project enforces a **Testing-First** mindset:
+Code reliability is a priority: This project enforces a **Testing-First** mindset:
 
 - **Strict TDD Cycle:** All business logic is driven by automated tests in `tests/`. We verify behavioral correctness before implementation, ensuring that complex multi-tenant relationships remain unbreakable during refactoring.
-- **Design Patterns in Practice:** Adopts **Services, Actions, and Observers** to avoid "Fat Controllers." We use strongly typed **Enums** for data boundaries and **Shared Schemas** in Filament to ensure strict DRY (Don't Repeat Yourself) compliance.
+- **Design Patterns in Practice:** Adopts **Services, Actions, and Observers** to avoid "Fat Controllers." Utilizing strongly typed **Enums** for data boundaries and **Shared Schemas** in Filament to ensure strict DRY (Don't Repeat Yourself) compliance.
 - **PostgreSQL & JSONB:** Utilizing PostgreSQL's relational power combined with JSONB for flexible metadata, balancing structured data integrity with the agility needed for dynamic SEO and site configurations.
 
 ## Documentation as Code
@@ -45,7 +45,7 @@ To quickly set up the containerized environment and see the engineering in actio
 To explore the project's inner workings and access comprehensive documentation, please refer to:
 
 
-[/docs - Architecture Decisions & Feature Specs](./docs/architecture/architecture_decisions.md)
+[/docs - Architecture Decisions & Feature Specs](./docs/adr/000-general-architecture-decisions.md)
 
 ---
 

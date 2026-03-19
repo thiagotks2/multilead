@@ -47,15 +47,25 @@ We strictly avoid the "Fat Controller" anti-pattern and mandate thorough testing
 - **Repositories / Services:** Controllers and Livewire components are lean; their only job is to handle requests and return responses. Heavy lifting is delegated to dedicated Service/Action classes.
 - **Observers & Events:** Side effects (like firing an email or logging an audit trail when a Lead is created) are handled via Eloquent Observers or event listeners. This adheres to the Single Responsibility Principle (SRP)—the logic that models the lead shouldn't care about the logging mechanism.
 
-## Granular Feature Documentation (Specifications as Code)
+## Documentation Strategy & Engineering Guidelines
 
-To bridge the gap between business requirements and technical implementation, we employ a **Granular Documentation** strategy located in `docs/features/`.
+To bridge the gap between business requirements, technical implementation, and team onboarding, we employ a multifaceted **Documentation Strategy**. Documenting the system is considered a core engineering task.
 
+### 1. Granular Feature Documentation (Specifications as Code)
+Located in `docs/features/`, these act as technical contracts before code is written.
 - **MANDATORY TEMPLATE:** Every new feature specification must be based on the [000-feature-spec-template.md](../features/000-feature-spec-template.md).
-- **Specification over Ambiguitiy:** No feature is built without a corresponding `.md` specification. Each doc contains Gherkin scenarios (Given/When/Then), Technical Specs (Hooks, Models, Guards), and Mermaid Sequence Diagrams.
-- **Contract-First Development:** These documents act as technical contracts. They prevent "vague implementations" by forcing the architect and developer to agree on logic flow, data boundaries, and failure cases before a single line of application code is written.
-- **Micro-Docs for Maintainability:** Instead of a single, monolithic (and often outdated) system manual, we maintain small, hyper-focused files. This makes it trivial to update documentation during refactoring and ensures that documentation evolves at the same pace as the code.
-- **Direct TDD Alignment:** The scenarios defined in these docs translate 1:1 into our PHPUnit Feature Tests, ensuring that what is documented is what is actually being verified by the CI/CD pipeline.
+- **Specification over Ambiguity:** No feature is built without a corresponding `.md` specification containing Gherkin scenarios, Technical Specs, and Sequence Diagrams.
+- **Contract-First & TDD Alignment:** We maintain small, hyper-focused files that align 1:1 with PHPUnit Feature Tests, preventing vague implementations and ensuring that documentation evolves at the same pace as the test pipeline.
+
+### 2. Architecture Decision Records (MADR)
+We record significant architectural choices using the **MADR (Markdown Architecture Decision Records)** template.
+- Located in `docs/adr/`.
+- Every atomic decision (e.g., introducing a new caching layer, external API integration) must be formalised as an ADR, detailing Status, Context, Decision, and Consequences. Over time, this provides a historical "why" for the project.
+
+### 3. C4 Model (Visual Architecture)
+We utilize the **C4 Model** to map out "what" the system is and "how" it communicates.
+- Located in `docs/architecture/`.
+- These are "living documents" using `Mermaid.js` to render diagrams. They provide a static visual representation of the System Context (Level 1) and Containers (Level 2), allowing developers to quickly grasp the structural boundaries and external system integrations of the Modular Monolith without deep-diving into code.
 
 ---
 

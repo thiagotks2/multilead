@@ -397,4 +397,12 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 - TDD: Write tests BEFORE implementing logic > CRUD.
 - Formatting: Strict PSR-12 via Laravel Pint.
 
+=== multilead documentation rules ===
+
+# Documentation Strategy & Language
+- EVERYTHING must be documented in English. Do not write Portuguese in documentation files or codebase comments.
+- **Granular Feature Documentation**: Located in `docs/features/`. Use the template `000-feature-spec-template.md`. Align 1:1 with PHPUnit Feature Tests.
+- **Architecture Decision Records (MADR)**: Placed in `docs/adr/`. Each atomic decision must be documented following the MADR structure.
+- **C4 Model (Visual Architecture)**: Visual structure placed in `docs/architecture/` (.md extensions using Mermaid). Separate diagrams for System Context (Level 1) and Containers (Level 2) to maintain micro-docs philosophy.
+
 </laravel-boost-guidelines>

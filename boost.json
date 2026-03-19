@@ -1,6 +1,9 @@
 {
     "agents": [
-        "gemini"
+        "gemini",
+        "cursor",
+        "cline",
+        "roo"
     ],
     "guidelines": true,
     "herd_mcp": false,
