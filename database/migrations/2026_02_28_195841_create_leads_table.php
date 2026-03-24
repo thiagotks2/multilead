@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete()->comment('The internal agent/user assigned to this lead');
             $table->unsignedBigInteger('customer_id')->nullable()->comment('Loose foreign key to future customers table');
             $table->foreignId('pipeline_stage_id')->nullable()->constrained()->nullOnDelete();
-            $table->integer('order')->default(0);
+            $table->integer('order_column')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
