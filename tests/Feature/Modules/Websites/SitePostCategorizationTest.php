@@ -19,7 +19,7 @@ class SitePostCategorizationTest extends TestCase
 
     public function test_it_can_attach_multiple_categories_to_a_post(): void
     {
-        $company = \App\Models\Company::factory()->create();
+        $company = \App\Modules\Identity\Models\Company::factory()->create();
         $site = \App\Modules\Websites\Models\Site::create([
             'company_id' => $company->id,
             'name' => 'Test Site',
@@ -62,7 +62,7 @@ class SitePostCategorizationTest extends TestCase
 
     public function test_category_can_have_multiple_posts(): void
     {
-        $company = \App\Models\Company::factory()->create();
+        $company = \App\Modules\Identity\Models\Company::factory()->create();
         $site = \App\Modules\Websites\Models\Site::create([
             'company_id' => $company->id,
             'name' => 'Test Site',

@@ -7,7 +7,7 @@ use App\Filament\AdminPanel\Resources\Companies\Pages\EditCompanies;
 use App\Filament\AdminPanel\Resources\Companies\Pages\ListCompanies;
 use App\Filament\AdminPanel\Resources\Companies\Schemas\CompaniesForm;
 use App\Filament\AdminPanel\Resources\Companies\Tables\CompaniesTable;
-use App\Models\Company;
+use App\Modules\Identity\Models\Company;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

@@ -2,8 +2,8 @@
 
 namespace App\Filament\AdminPanel\Resources\Companies\RelationManagers;
 
-use App\Enums\SiteStatus;
-use App\Models\Site;
+use App\Modules\Websites\Enums\SiteStatus;
+use App\Modules\Websites\Models\Site;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;

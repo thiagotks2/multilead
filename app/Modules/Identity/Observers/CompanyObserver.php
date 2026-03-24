@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Modules\Identity\Observers;
+
+use App\Modules\Identity\Models\Company;
+use App\Modules\Identity\Services\CompanyProvisioningService;
+
+class CompanyObserver
+{
+    /**
+     * Handle the Company "created" event.
+     */
+    public function created(Company $company): void
+    {
+        $provisioningService = resolve(CompanyProvisioningService::class);
+        $provisioningService->provision($company);
+    }
+
+    /**
+     * Handle the Company "updated" event.
+     */
+    public function updated(Company $company): void
+    {
+        //
+    }
+
+    /**
+     * Handle the Company "deleted" event.
+     */
+    public function deleted(Company $company): void
+    {
+        //
+    }
+
+    /**
+     * Handle the Company "restored" event.
+     */
+    public function restored(Company $company): void
+    {
+        //
+    }
+
+    /**
+     * Handle the Company "force deleted" event.
+     */
+    public function forceDeleted(Company $company): void
+    {
+        //
+    }
+}

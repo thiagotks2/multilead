@@ -2,7 +2,7 @@
 
 namespace App\Filament\AdminPanel\Resources\Companies\Schemas;
 
-use App\Enums\DocumentType;
+use App\Modules\Identity\Enums\DocumentType;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;

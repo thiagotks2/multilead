@@ -6,7 +6,7 @@ use App\Filament\App\Resources\Sites\Pages\CreateSite;
 use App\Filament\App\Resources\Sites\Pages\EditSite;
 use App\Filament\App\Resources\Sites\Pages\ListSites;
 use App\Filament\App\Resources\Sites\Tables\SitesTable;
-use App\Models\Site;
+use App\Modules\Websites\Models\Site;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

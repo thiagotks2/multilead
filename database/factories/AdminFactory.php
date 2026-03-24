@@ -5,10 +5,11 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Admin>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\Identity\Models\Admin>
  */
 class AdminFactory extends Factory
 {
+    protected $model = \App\Modules\Identity\Models\Admin::class;
     /**
      * Define the model's default state.
      *

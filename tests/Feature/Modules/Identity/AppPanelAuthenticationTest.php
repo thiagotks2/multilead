@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Modules\Identity;
 
-use App\Modules\Infrastructure\Models\Company;
+use App\Modules\Identity\Models\Company;
 use App\Modules\Identity\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

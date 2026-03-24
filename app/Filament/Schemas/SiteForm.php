@@ -26,9 +26,9 @@ class SiteForm
                                     ->required()
                                     ->maxLength(255),
                                 Select::make('status')
-                                    ->options(\App\Enums\SiteStatus::class)
+                                    ->options(\App\Modules\Websites\Enums\SiteStatus::class)
                                     ->required()
-                                    ->default(\App\Enums\SiteStatus::Development),
+                                    ->default(\App\Modules\Websites\Enums\SiteStatus::Development),
                             ]),
 
                         Tab::make('SEO')

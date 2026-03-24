@@ -21,6 +21,13 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/sail (SAIL) - v1
 - phpunit/phpunit (PHPUNIT) - v11
 
+## Docker & Command Execution
+
+- **CRITICAL**: All commands (Artisan, Composer, PHPUnit, etc.) MUST be executed INSIDE the Docker container.
+- Use the following command format: `docker exec -it multilead ash -c "YOUR_COMMAND"`
+- This applies to creating files, moving files, running tests, and any other operation that affects the application state.
+- NEVER run commands directly on the host machine.
+
 ## Conventions
 
 - You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.

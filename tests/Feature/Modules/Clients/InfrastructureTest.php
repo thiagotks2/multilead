@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Modules\Clients;
 
-use App\Models\Company;
-use App\Models\User;
+use App\Modules\Identity\Models\Company;
+use App\Modules\Identity\Models\User;
 use App\Modules\Clients\Models\Client;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
