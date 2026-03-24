@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Feature\Modules\Infrastructure;
 
 use App\Models\Company;
-use App\Models\Pipeline;
-use App\Services\CompanyProvisioningService;
+use App\Modules\CRM\Models\Pipeline;
+use App\Modules\Infrastructure\Services\CompanyProvisioningService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

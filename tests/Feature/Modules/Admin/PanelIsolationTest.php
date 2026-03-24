@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Modules\Admin;
 
-use App\Models\Admin;
-use App\Models\Company;
-use App\Models\User;
+use App\Modules\Admin\Models\Admin;
+use App\Modules\Infrastructure\Models\Company;
+use App\Modules\Identity\Models\User;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

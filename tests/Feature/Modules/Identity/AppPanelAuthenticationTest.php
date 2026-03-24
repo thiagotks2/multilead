@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Modules\Identity;
 
-use App\Models\Company;
-use App\Models\User;
+use App\Modules\Infrastructure\Models\Company;
+use App\Modules\Identity\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
