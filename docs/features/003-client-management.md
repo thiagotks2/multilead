@@ -12,6 +12,7 @@ A **Client** is a system entity representing an individual who has either engage
 - **BR01 (Uniqueness):** A client's email must be unique within a single company (`company_id`). However, the same individual (email) can safely exist across different tenants.
 - **BR02 (Exclusivity):** If a client has an assigned `user_id`, their classification as an "Exclusive Client" is subject to the `company` configuration. Depending on tenant-level settings, leads originating from these clients may either be perpetually routed to the linked user or follow standard distribution rules in future implementations.
 - **BR03 (Observability):** Any creation or update to a client record must be strictly registered via the `spatie/laravel-activitylog` package.
+- **BR04 (Phone Integrity):** The `phone` attribute must be validated and normalized using the centralized `ValidPhone` rule and the `PhoneInput` component.
 
 ## 3. Technical Specification
 - **Module Path:** `app/Modules/Clients/`
@@ -47,7 +48,12 @@ A **Client** is a system entity representing an individual who has either engage
             - `Informations`: Main client details, address, and profile data.
             - `Timeline`: Activity history via `spatie/laravel-activitylog`. Sorted from oldest (bottom) to newest (top).
     - **Forms (Create/Edit):**
-        - **Mode**: Separate screen or Modal (NOT a tab within the view page).
+    - **Mode**: Separate screen or Modal (NOT a tab within the view page).
+    - **Phone**: Must use the global `PhoneInput` schema for consistent masking and normalization.
+- **Tables (List View):**
+    - **Phone**: Must use the global `PhoneColumn` for consistent formatting and clipboard support.
+- **Infolists (View Page):**
+    - **Phone**: Must use the global `PhoneEntry` for human-readable display.
 
 ## 5. Test Scenarios (TDD)
 ### Happy Path: Creation of a Tenant "Company Client"
