@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Modules\Clients;
 
-use App\Filament\App\Resources\ClientResource;
-use App\Filament\App\Resources\ClientResource\Pages\CreateClient;
-use App\Filament\App\Resources\ClientResource\Pages\ListClients;
-use App\Filament\App\Resources\ClientResource\Pages\ViewClient;
+use App\Filament\App\Resources\Clients\ClientResource;
+use App\Filament\App\Resources\Clients\Pages\CreateClient;
+use App\Filament\App\Resources\Clients\Pages\ListClients;
+use App\Filament\App\Resources\Clients\Pages\ViewClient;
 use App\Modules\Clients\Models\Client;
 use App\Modules\Identity\Models\Company;
 use App\Modules\Identity\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -19,6 +20,7 @@ class ManagementTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Company $company;
 
     protected function setUp(): void
@@ -32,6 +34,9 @@ class ManagementTest extends TestCase
         ]);
 
         $this->actingAs($this->user, 'user');
+
+        Filament::setCurrentPanel(Filament::getPanel('app'));
+        Filament::setTenant($this->company);
     }
 
     /*
@@ -95,7 +100,7 @@ class ManagementTest extends TestCase
             ->fillForm([
                 'name' => 'John Tenant',
                 'email' => 'tenant@example.com',
-                'phone' => '123456789',
+                'phone' => '41991234567',
             ])
             ->call('create')
             ->assertHasNoFormErrors();
@@ -125,6 +130,7 @@ class ManagementTest extends TestCase
             ->fillForm([
                 'name' => 'Exclusive John',
                 'email' => 'exclusive@example.com',
+                'phone' => '41991234567',
                 'user_id' => $this->user->id,
             ])
             ->call('create')
@@ -133,8 +139,25 @@ class ManagementTest extends TestCase
         $this->assertDatabaseHas('clients', [
             'name' => 'Exclusive John',
             'email' => 'exclusive@example.com',
+            'phone' => '5541991234567', // Normalized in database
             'user_id' => $this->user->id,
         ]);
+    }
+
+    /**
+     * Requirement: Phone Integrity (BR04)
+     * Verifying that the phone input correctly validates according to the new logic.
+     */
+    public function test_cannot_create_client_with_invalid_phone_via_form(): void
+    {
+        Livewire::test(CreateClient::class)
+            ->fillForm([
+                'name' => 'Faulty Phone',
+                'email' => 'faulty@example.com',
+                'phone' => '123', // Invalid
+            ])
+            ->call('create')
+            ->assertHasFormErrors(['phone']);
     }
 
     /**
@@ -196,10 +219,10 @@ class ManagementTest extends TestCase
         ]);
 
         Livewire::test(ListClients::class)
-            ->setTableTab('My Clients')
+            ->set('activeTab', 'My Clients')
             ->assertCanSeeTableRecords([$myClient])
             ->assertCanNotSeeTableRecords([$otherClient])
-            ->setTableTab('All')
+            ->set('activeTab', 'All')
             ->assertCanSeeTableRecords([$myClient, $otherClient]);
     }
 
@@ -215,7 +238,7 @@ class ManagementTest extends TestCase
             'record' => $client->id,
         ])
             ->assertSuccessful()
-            ->assertSee('Informations')
+            ->assertSee('Details')
             ->assertSee('Timeline');
     }
 }
