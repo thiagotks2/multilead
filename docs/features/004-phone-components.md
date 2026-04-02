@@ -25,24 +25,30 @@ As a standardized platform requirement, we need a unified system to handle, vali
 2. **Validator Adapter (`App\Rules\ValidPhone`)**: Implement a generic Laravel Validation rule that binds to the Phone domain utility.
 3. **Custom Schemas**: Construct `PhoneInput` (for creating/editing records enforcing the mask natively on frontend input mechanisms), `PhoneColumn` (for table data grids supporting instant clip-boarding), and `PhoneEntry` (for static Infolist rendering).
 
-## 4. UI & Navigation (Filament)
-- **Panel:** App & Admin (Accessible contextually)
-- **Navigation:** Group: N/A, Label: N/A, Icon: N/A
-- **Resource Features:**
-    - List: Implement visual danger blocks if an invalid legacy phone string sneaks into the parser flow.
-    - View: Expose the `+55 (XX) XXXXX-XXXX` human template visually.
-    - Form: Guarantee the backend parses and `dehydrate` operations compress input before yielding control back to Eloquent.
+## 4. Application Vectors
+- **Implementation:** Core domain utilities (`App\Support\Phone`) and UI formatting elements.
+- **Goal:** Rather than relying on isolated Filament validations, this feature centralizes logic so any entry point (Forms, APIs, CLI commands) uses the same strict mathematical validation rules. Filament components simply act as consumers of this domain logic.
 
 ## 5. Test Scenarios (TDD)
-### Happy Path: Local Scope Inflation
-- **Given** an agent attempts to save a new record inputting a local 9-digit number.
-- **When** the custom forms invoke the backend dehydrate operation.
-- **Then** the database automatically captures the `55` DDI + local `DDD` enforcing the regional data norm.
+### Scenario 1: Local & Regional Brazilian Numbers
+- **Given** a 8 or 9-digit local phone number, or a 10 or 11-digit regional number with DDD.
+- **When** passed through `Phone::isValid()`.
+- **Then** the engine should recognize it as a valid Brazilian array and return `true`.
 
-### Error Path: Impossible Format Capture
-- **Given** an agent types an incomplete 5-digit number into the `PhoneInput`.
-- **When** the form submits a POST payload for creation context.
-- **Then** the request triggers the standard Laravel validation loop mapped to `ValidPhone` rule, returning an explicit localized failure message and halting eloquent persistency.
+### Scenario 2: Long Format DDI Boundaries (Brazilian vs International)
+- **Given** a 12 or 13-digit number.
+- **When** passing it through the validation engine.
+- **Then** it MUST start with the default DDI (`55`) to be accepted as a Brazilian number, otherwise it must fail validation and be rejected by the system.
+
+### Scenario 3: Below Threshold & Garbage Inputs
+- **Given** a 5-digit number or a string filled with letters (`"abc-1234"`).
+- **When** passed through `Phone::isValid()`.
+- **Then** it must automatically fail validation due to insufficient minimum integer length (>= 8).
+
+### Scenario 4: Validation Rule Adapter Testing
+- **Given** an HTTP Post request payload directed at a database mutation.
+- **When** the payload relies on the `ValidPhone` rule.
+- **Then** any mismatch in the above mathematical constraints instantly triggers the standard Laravel validation exception ('The provided phone is invalid.').
 
 > [!IMPORTANT]
 > **Filament Testing Requirements:**
@@ -57,9 +63,8 @@ erDiagram
 ```
 
 ## 7. Definition of Done (DoD)
-- [ ] Feature documentation aligned with actual implementation.
-- [ ] TDD: Feature tests covering all happy and failure paths.
-- [ ] Logic implemented in Actions (if complex).
-- [ ] Linting and formatting pass (Laravel Pint).
-- [ ] Activity logs implemented for all CRUD/Actions.
+- [ ] Core `App\Support\Phone` mathematically handles all character stripping and size logic correctly.
+- [ ] Adaptive Validation Rule (`ValidPhone`) successfully consumes the custom Support limits.
+- [ ] Dedicated Unit/Feature tests written to forcefully attempt local, garbage, and long-international inputs into the Validator directly.
+- [ ] Centralized Custom Schemas (`PhoneInput`, etc.) created pointing to this engine.
 - [ ] Project State updated.
