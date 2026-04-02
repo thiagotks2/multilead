@@ -35,13 +35,18 @@ As a standardized platform requirement, we need a unified system to handle, vali
 - **When** passed through `Phone::isValid()`.
 - **Then** the engine should recognize it as a valid Brazilian array and return `true`.
 
-### Scenario 2: Long Format DDI Boundaries (Brazilian vs International)
-- **Given** a 12 or 13-digit number.
-- **When** passing it through the validation engine.
-- **Then** it MUST start with the default DDI (`55`) to be accepted as a Brazilian number, otherwise it must fail validation and be rejected by the system.
+### Scenario 2: Strict Brazilian Regex Rules
+- **Given** a 8 or 9-digit Brazilian number (after stripping DDI/DDD if present).
+- **When** passed through `Phone::isValid()`.
+- **Then** if it is a 9-digit number, it MUST start with `9`. If it is an 8-digit number, it MUST NOT start with `9`.
 
-### Scenario 3: Below Threshold & Garbage Inputs
-- **Given** a 5-digit number or a string filled with letters (`"abc-1234"`).
+### Scenario 3: Long Format DDI Boundaries (Brazilian vs International)
+- **Given** a >= 12 digit number.
+- **When** passing it through the validation engine.
+- **Then** if it starts with the default DDI (`55`), it is evaluated strictly as a Brazilian number. If it does not start with `55`, it is evaluated as a valid International number and allowed through.
+
+### Scenario 4: Below Threshold & Garbage Inputs
+- **Given** a 7-digit number or a string filled with letters (`"abc-1234"`).
 - **When** passed through `Phone::isValid()`.
 - **Then** it must automatically fail validation due to insufficient minimum integer length (>= 8).
 

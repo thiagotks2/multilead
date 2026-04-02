@@ -15,9 +15,10 @@ We will establish a **Centralized Phone Parsing Engine** using Domain-Driven Des
 ### 2. Format Definitions & Mathematical Logic
 We define strict criteria to govern what constitutes acceptable data:
 
-* **Brazilian Pattern:**
-  * Must be 8 or 9 digits (Local scope natively).
-  * Must be 10 or 11 digits (Regional scope explicitly declaring DDD).
+* **Brazilian Pattern (Strict Local Regex):**
+  * Numbers evaluated as Brazilian (sizes 8, 9, 10, 11 natively or 12/13 with DDI) undergo strict local part validation.
+  * If the local portion is **9 digits**, it MUST start with `9` (Mobiles).
+  * If the local portion is **8 digits**, it MUST NOT start with `9` (Landlines).
   * Must be 12 or 13 digits where the first two digits are explicitly `55` (International scope declaring DDI Brazil).
 * **International Pattern:**
   * Must be at least 8 digits long.
