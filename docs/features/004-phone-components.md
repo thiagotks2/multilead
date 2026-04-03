@@ -2,7 +2,7 @@
 
 ## 0. Context & References
 - **ADR Link:** [ADR 016 - Phone Number Validation and Formatting Strategy](../adr/016-phone-formatting-validation.md)
-- **Status:** Draft
+- **Status:** Implemented
 - **Stakeholders:** Development Team, Customer Success Team
 
 ## 1. Description
@@ -68,8 +68,8 @@ erDiagram
 ```
 
 ## 7. Definition of Done (DoD)
-- [ ] Core `App\Support\Phone` mathematically handles all character stripping and size logic correctly.
-- [ ] Adaptive Validation Rule (`ValidPhone`) successfully consumes the custom Support limits.
-- [ ] Dedicated Unit/Feature tests written to forcefully attempt local, garbage, and long-international inputs into the Validator directly.
-- [ ] Centralized Custom Schemas (`PhoneInput`, etc.) created pointing to this engine.
-- [ ] Project State updated.
+- [x] Core `App\Support\Phone` mathematically handles all character stripping and size logic correctly.
+- [x] Adaptive Validation Rule (`ValidPhone`) successfully consumes the custom Support limits.
+- [x] Dedicated Unit/Feature tests written to forcefully attempt local, garbage, and long-international inputs into the Validator directly.
+- [x] Centralized Custom Schemas (`PhoneInput`, etc.) created pointing to this engine.
+- [x] Project State updated.

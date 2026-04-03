@@ -2,7 +2,7 @@
 
 ## 0. Context & References
 - **ADR Link:** [002-client-module-boundaries.md](file:///Users/thiagocardoso/projetos/www/multilead/docs/adr/002-client-module-boundaries.md)
-- **Status:** Draft
+- **Status:** Implemented
 - **Stakeholders:** Users, Agents, Tenants
 
 ## 1. Description
@@ -85,8 +85,8 @@ erDiagram
 ```
 
 ## 7. Definition of Done (DoD)
-- [ ] Feature documentation aligned with actual implementation.
-- [ ] TDD: Feature tests covering all happy and failure paths.
-- [ ] Linting and formatting pass (Laravel Pint).
-- [ ] Activity logs implemented for all CRUD/Actions.
-- [ ] Project State updated.
+- [x] Feature documentation aligned with actual implementation.
+- [x] TDD: Feature tests covering all happy and failure paths.
+- [x] Linting and formatting pass (Laravel Pint).
+- [x] Activity logs implemented for all CRUD/Actions.
+- [x] Project State updated.
