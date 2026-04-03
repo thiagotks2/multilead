@@ -22,6 +22,17 @@ class WebsiteResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $tenant = filament()->getTenant();
+
+        if (! $tenant) {
+            return false;
+        }
+
+        return $tenant->sites()->count() > 0;
+    }
+
     public static function getNavigationLabel(): string
     {
         $tenant = filament()->getTenant();
