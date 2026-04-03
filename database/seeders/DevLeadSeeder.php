@@ -2,12 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Enums\LeadMedium;
-use App\Models\Company;
-use App\Models\Lead;
-use App\Models\LeadSource;
-use App\Models\Pipeline;
-use App\Models\User;
+use App\Modules\CRM\Enums\LeadMedium;
+use App\Modules\CRM\Models\Lead;
+use App\Modules\CRM\Models\LeadSource;
+use App\Modules\CRM\Models\Pipeline;
+use App\Modules\Identity\Models\Company;
+use App\Modules\Identity\Models\User;
+use App\Support\Phone;
 use Illuminate\Database\Seeder;
 
 class DevLeadSeeder extends Seeder
@@ -17,70 +18,44 @@ class DevLeadSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed Leads for Company 1
-        $c1 = Company::find(1);
-        if ($c1) {
-            $pipeline1 = Pipeline::where('company_id', $c1->id)->first();
-            $inbox1 = $pipeline1->stages()->where('name', 'Inbox')->first();
-            $user1 = User::where('company_id', $c1->id)->first();
-            $source1 = LeadSource::where('company_id', null)->inRandomOrder()->first(); // Global source
+        $companies = Company::whereIn('id', [1, 2])->get();
 
-            Lead::create([
-                'company_id' => $c1->id,
-                'lead_source_id' => $source1?->id,
-                'user_id' => $user1?->id,
-                'pipeline_stage_id' => $inbox1?->id,
-                'name' => 'João Silva (Teste C1)',
-                'email' => 'joao.silva@teste1.com',
-                'phone' => '11999999999',
-                'message' => 'Gostaria de um orçamento B2B.',
-                'medium' => LeadMedium::Organic,
-            ]);
+        foreach ($companies as $company) {
+            $suffix = $company->id === 1 ? 'c1' : 'c2';
+            
+            // Get default pipeline and its default stage (Provisioned by CompanyProvisioningService)
+            $pipeline = Pipeline::where('company_id', $company->id)->where('is_default', true)->first();
+            if (!$pipeline) continue;
+            
+            $defaultStage = $pipeline->stages()->where('is_default', true)->first();
+            if (!$defaultStage) continue;
 
-            Lead::create([
-                'company_id' => $c1->id,
-                'lead_source_id' => null,
-                'user_id' => null, // Unassigned
-                'pipeline_stage_id' => $inbox1?->id,
-                'name' => 'Maria Souza (C1)',
-                'email' => 'maria@teste1.com',
-                'message' => 'Preciso de ajuda urgente com serviços.',
-                'medium' => LeadMedium::Paid,
-            ]);
-        }
+            $users = User::where('company_id', $company->id)->get();
+            $sources = LeadSource::where('company_id', $company->id)->get();
 
-        // Seed Leads for Company 2
-        $c2 = Company::find(2);
-        if ($c2) {
-            $pipeline2 = Pipeline::where('company_id', $c2->id)->first();
-            $inbox2 = $pipeline2->stages()->where('name', 'Inbox')->first();
-            $user2 = User::where('company_id', $c2->id)->first();
+            for ($i = 1; $i <= 10; $i++) {
+                $hasSource = rand(0, 1);
+                $hasUser = rand(0, 1);
+                $isPaid = rand(0, 1);
+                
+                $phoneRaw = '119' . rand(10000000, 99999999);
+                $phone = Phone::toDatabase($phoneRaw);
 
-            // Randomly grab a custom tenant source if it exists
-            $source2 = LeadSource::where('company_id', $c2->id)->inRandomOrder()->first();
-
-            Lead::create([
-                'company_id' => $c2->id,
-                'lead_source_id' => $source2?->id,
-                'user_id' => $user2?->id,
-                'pipeline_stage_id' => $inbox2?->id,
-                'name' => 'Carlos Estudante (Teste C2)',
-                'email' => 'carlos@teste2.com',
-                'phone' => '21988888888',
-                'message' => 'Quero me matricular na próxima turma.',
-                'medium' => LeadMedium::Paid,
-            ]);
-
-            Lead::create([
-                'company_id' => $c2->id,
-                'lead_source_id' => null,
-                'user_id' => null, // Unassigned
-                'pipeline_stage_id' => $inbox2?->id,
-                'name' => 'Ana Curiosa (C2)',
-                'email' => 'ana@teste2.com',
-                'message' => 'Como funciona as aulas?',
-                'medium' => LeadMedium::Organic,
-            ]);
+                Lead::withTrashed()->updateOrCreate(
+                    ['email' => "lead_{$i}_{$suffix}@example.com"],
+                    [
+                        'company_id' => $company->id,
+                        'lead_source_id' => ($hasSource && $sources->isNotEmpty()) ? $sources->random()->id : null,
+                        'user_id' => ($hasUser && $users->isNotEmpty()) ? $users->random()->id : null,
+                        'pipeline_stage_id' => $defaultStage->id,
+                        'name' => "Lead {$i} {$suffix}",
+                        'phone' => $phone,
+                        'medium' => $isPaid ? LeadMedium::Paid : LeadMedium::Organic,
+                        'message' => "This is a test lead {$i} for {$company->name}.",
+                        'deleted_at' => null,
+                    ]
+                );
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Site;
-use App\Models\SitePost;
-use App\Models\SitePostCategory;
+use App\Modules\Websites\Models\Site;
+use App\Modules\Websites\Models\SitePost;
+use App\Modules\Websites\Models\SitePostCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -18,32 +18,37 @@ class DevBlogSeeder extends Seeder
         $sites = Site::all();
 
         foreach ($sites as $site) {
-            // Create categories for this site
             $categories = collect();
-            for ($i = 1; $i <= 3; $i++) {
-                $name = fake()->unique()->words(2, true);
-                $categories->push(SitePostCategory::create([
-                    'site_id' => $site->id,
-                    'name' => ucfirst($name),
-                    'slug' => Str::slug($name),
-                    'description' => fake()->sentence(),
-                ]));
+            $categoryNames = ['Technology', 'Marketing', 'Business', 'Updates'];
+
+            foreach ($categoryNames as $name) {
+                $categories->push(SitePostCategory::withTrashed()->updateOrCreate(
+                    ['site_id' => $site->id, 'slug' => Str::slug($name)],
+                    [
+                        'name' => $name,
+                        'description' => "Test category for {$name}",
+                        'deleted_at' => null,
+                    ]
+                ));
             }
 
-            // Create posts for this site
-            for ($j = 1; $j <= 10; $j++) {
-                $title = fake()->sentence();
-                $post = SitePost::create([
-                    'site_id' => $site->id,
-                    'title' => $title,
-                    'slug' => Str::slug($title),
-                    'content' => fake()->paragraphs(3, true),
-                    'published_at' => fake()->dateTimeBetween('-1 year', 'now'),
-                ]);
+            for ($j = 1; $j <= 5; $j++) {
+                $title = "Test Post {$j} for Site {$site->id}";
+                $slug = Str::slug($title);
 
-                // Randomly associate posts with categories
+                $post = SitePost::withTrashed()->updateOrCreate(
+                    ['site_id' => $site->id, 'slug' => $slug],
+                    [
+                        'title' => $title,
+                        'content' => "This is a test blog post content for {$title}.",
+                        'published_at' => now()->subDays(rand(1, 30)),
+                        'deleted_at' => null,
+                    ]
+                );
+
+                // Sync categories
                 $randomCategories = $categories->random(rand(1, 2));
-                $post->categories()->attach($randomCategories->pluck('id'));
+                $post->categories()->sync($randomCategories->pluck('id'));
             }
         }
     }

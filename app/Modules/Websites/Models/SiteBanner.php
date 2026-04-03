@@ -21,7 +21,7 @@ class SiteBanner extends Model
     }
 
     protected $fillable = [
-        'site_banner_category_id',
+        'site_banner_place_id',
         'title',
         'description',
         'image_path',
@@ -48,13 +48,13 @@ class SiteBanner extends Model
 
     public function tapActivity(Activity $activity, string $eventName)
     {
-        if (isset($activity->subject->category->site->company_id)) {
-            $activity->company_id = $activity->subject->category->site->company_id;
+        if (isset($activity->subject->place->site->company_id)) {
+            $activity->company_id = $activity->subject->place->site->company_id;
         }
     }
 
-    public function category(): BelongsTo
+    public function place(): BelongsTo
     {
-        return $this->belongsTo(SiteBannerCategory::class, 'site_banner_category_id');
+        return $this->belongsTo(SiteBannerPlace::class, 'site_banner_place_id');
     }
 }

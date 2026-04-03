@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('site_id')->constrained()->cascadeOnDelete();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->text('content');
+            $table->unique(['site_id', 'slug']);
             $table->string('featured_image_path')->nullable();
             $table->json('seo_settings')->nullable();
             $table->json('script_settings')->nullable();

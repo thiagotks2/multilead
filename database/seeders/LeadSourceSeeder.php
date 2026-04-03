@@ -22,9 +22,9 @@ class LeadSourceSeeder extends Seeder
         ];
 
         foreach ($defaults as $source) {
-            LeadSource::firstOrCreate(
-                ['name' => $source],
-                ['company_id' => null] // Global orphaned sources available to all companies
+            LeadSource::withTrashed()->updateOrCreate(
+                ['name' => $source, 'company_id' => null], // Global orphaned sources available to all companies
+                ['deleted_at' => null]
             );
         }
     }

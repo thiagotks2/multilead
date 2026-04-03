@@ -14,28 +14,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seeders that generate dummy data for development
         if (app()->environment('local', 'testing', 'development')) {
             $this->call([
-                AdminSeeder::class,
-                CompanySeeder::class,
-                SiteSeeder::class,
-                SiteBannerPlaceSeeder::class,
+                DevAdminSeeder::class,
+                DevCompanySeeder::class,
+                DevUserSeeder::class,
+                DevSiteSeeder::class,
                 DevSiteBannerPlaceSeeder::class,
-                UserSeeder::class,
-                DevClientSeeder::class,
-                LeadSourceSeeder::class,
+                DevSiteBannerSeeder::class,
                 DevLeadSourceSeeder::class,
-                DevPipelineSeeder::class,
+                DevClientSeeder::class,
                 DevLeadSeeder::class,
                 DevBlogSeeder::class,
             ]);
-        }
-
-        if (app()->environment('production')) {
+        }else{
             $this->call([
                 AdminSeeder::class,
-                LeadSourceSeeder::class,
                 SiteBannerPlaceSeeder::class,
             ]);
         }

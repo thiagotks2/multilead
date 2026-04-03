@@ -6,7 +6,7 @@ use App\Modules\Identity\Models\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class AdminSeeder extends Seeder
+class DevAdminSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,15 +15,15 @@ class AdminSeeder extends Seeder
     {
         try {
             Admin::updateOrCreate(
-                ['email' => 'admin@multilead.com'],
+                ['email' => 'admin@admin.com'],
                 [
-                    'name' => 'System Admin',
+                    'name' => 'Admin Test',
                     'password' => Hash::make('123'),
                     'email_verified_at' => now(),
                 ]
             );
         } catch (\Illuminate\Database\UniqueConstraintViolationException $e) {
-            // Success if it already exists or handles the current environment weirdness
+            // If it already exists, that is okay for a seeder.
         }
     }
 }
