@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\App\Resources\Sites;
+namespace App\Filament\App\Resources\Websites;
 
-use App\Filament\App\Resources\Sites\Pages\CreateSite;
-use App\Filament\App\Resources\Sites\Pages\EditSite;
-use App\Filament\App\Resources\Sites\Pages\ListSites;
-use App\Filament\App\Resources\Sites\Tables\SitesTable;
+use App\Filament\App\Resources\Websites\Pages\CreateWebsite;
+use App\Filament\App\Resources\Websites\Pages\EditWebsite;
+use App\Filament\App\Resources\Websites\Pages\ListWebsites;
+use App\Filament\App\Resources\Websites\Tables\WebsitesTable;
 use App\Modules\Websites\Models\Site;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -14,7 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SiteResource extends Resource
+class WebsiteResource extends Resource
 {
     protected static ?string $model = Site::class;
 
@@ -27,10 +27,10 @@ class SiteResource extends Resource
         $tenant = filament()->getTenant();
 
         if ($tenant && $tenant->sites()->count() > 1) {
-            return 'My Sites';
+            return 'My Websites';
         }
 
-        return 'Settings';
+        return 'Website Settings';
     }
 
     public static function getNavigationUrl(): string
@@ -48,27 +48,22 @@ class SiteResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        $tenant = filament()->getTenant();
-        if ($tenant && $tenant->sites()->count() > 1) {
-            return 'Sites'; // Groups under "Sites" label
-        }
-
-        return 'Site'; // Groups under "Site" label
+        return 'Websites';
     }
 
     public static function getModelLabel(): string
     {
-        return 'Site';
+        return 'Website';
     }
 
     public static function form(Schema $schema): Schema
     {
-        return \App\Filament\Schemas\SiteForm::configure($schema);
+        return \App\Filament\Schemas\WebsiteForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return SitesTable::configure($table);
+        return WebsitesTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -81,9 +76,9 @@ class SiteResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListSites::route('/'),
-            'create' => CreateSite::route('/create'),
-            'edit' => EditSite::route('/{record}/edit'),
+            'index' => ListWebsites::route('/'),
+            'create' => CreateWebsite::route('/create'),
+            'edit' => EditWebsite::route('/{record}/edit'),
         ];
     }
 

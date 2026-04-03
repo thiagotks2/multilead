@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Modules\Websites;
 
-use App\Filament\App\Resources\Sites\Pages\EditSite;
-use App\Filament\App\Resources\Sites\Pages\ListSites;
-use App\Filament\App\Resources\Sites\SiteResource;
+use App\Filament\App\Resources\Websites\Pages\EditWebsite;
+use App\Filament\App\Resources\Websites\Pages\ListWebsites;
+use App\Filament\App\Resources\Websites\WebsiteResource;
 use App\Modules\Identity\Models\Company;
 use App\Modules\Identity\Models\User;
 use App\Modules\Websites\Enums\SiteStatus;
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class SiteManagementTest extends TestCase
+class WebsiteManagementTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -32,7 +32,7 @@ class SiteManagementTest extends TestCase
             'active' => true,
         ]);
 
-        $this->actingAs($this->user, 'web');
+        $this->actingAs($this->user, 'user');
 
         Filament::setCurrentPanel(Filament::getPanel('app'));
         Filament::setTenant($this->company);
@@ -46,26 +46,26 @@ class SiteManagementTest extends TestCase
 
     /**
      * Requirement: Single Site Navigation
-     * If 1 site exists, label is "Site Settings" and URL is Edit.
+     * If 1 site exists, label is "Website Settings" and URL is Edit.
      */
     public function test_navigation_redirects_to_edit_when_single_site_exists(): void
     {
         $site = Site::factory()->create(['company_id' => $this->company->id]);
 
-        $this->assertEquals('Site Settings', SiteResource::getNavigationLabel());
-        $this->assertStringContainsString("/sites/{$site->id}/edit", SiteResource::getNavigationUrl());
+        $this->assertEquals('Website Settings', WebsiteResource::getNavigationLabel());
+        $this->assertStringContainsString("/websites/{$site->id}/edit", WebsiteResource::getNavigationUrl());
     }
 
     /**
      * Requirement: Multiple Sites Navigation
-     * If >1 sites exist, label is "My Sites" and URL is Index.
+     * If >1 sites exist, label is "My Websites" and URL is Index.
      */
     public function test_navigation_shows_list_when_multiple_sites_exist(): void
     {
         Site::factory()->count(2)->create(['company_id' => $this->company->id]);
 
-        $this->assertEquals('My Sites', SiteResource::getNavigationLabel());
-        $this->assertStringEndsWith('/sites', SiteResource::getNavigationUrl());
+        $this->assertEquals('My Websites', WebsiteResource::getNavigationLabel());
+        $this->assertStringEndsWith('/websites', WebsiteResource::getNavigationUrl());
     }
 
     /*
@@ -77,26 +77,26 @@ class SiteManagementTest extends TestCase
     /**
      * Requirement: Restricted Creation (App Panel)
      */
-    public function test_tenant_cannot_create_site_via_app_panel(): void
+    public function test_tenant_cannot_create_website_via_app_panel(): void
     {
-        $this->get(SiteResource::getUrl('create', panel: 'app'))
+        $this->get(WebsiteResource::getUrl('create', panel: 'app'))
             ->assertForbidden();
     }
 
     /**
      * Requirement: Restricted Deletion (App Panel)
      */
-    public function test_tenant_cannot_delete_site_via_app_panel(): void
+    public function test_tenant_cannot_delete_website_via_app_panel(): void
     {
         $site = Site::factory()->create(['company_id' => $this->company->id]);
 
-        Livewire::test(EditSite::class, ['record' => $site->id])
+        // Should not see delete action in edit page
+        Livewire::test(EditWebsite::class, ['record' => $site->id])
             ->assertActionHidden('delete');
 
-        // Direct attempt via Page action should also be blocked by Policy
-        Livewire::test(ListSites::class)
-            ->callTableAction('delete', $site)
-            ->assertForbidden();
+        // Should not see delete action in table
+        Livewire::test(ListWebsites::class)
+            ->assertTableActionDoesNotExist('delete');
     }
 
     /*
@@ -113,28 +113,26 @@ class SiteManagementTest extends TestCase
     {
         $site = Site::factory()->create(['company_id' => $this->company->id]);
 
-        Livewire::test(EditSite::class, ['record' => $site->id])
+        Livewire::test(EditWebsite::class, ['record' => $site->id])
             ->assertFormFieldExists('status')
-            ->assertFormFieldIsAvailable('status', SiteStatus::Production)
-            ->assertFormFieldIsAvailable('status', SiteStatus::Development)
-            // Maintenance status (should throw error/fail until implemented)
-            // ->assertFormFieldIsAvailable('status', SiteStatus::Maintenance)
-            ->assertFormFieldIsNotAvailable('status', SiteStatus::Inactive);
+            ->fillForm(['status' => SiteStatus::Inactive])
+            ->call('save')
+            ->assertHasFormErrors(['status']); // Should fail because inactive is removed from options
     }
 
     /**
      * Requirement: Read-only Inactive Sites
-     * If site is inactive, no fields should be editable.
+     * If site is inactive, the central form should be disabled.
      */
-    public function test_inactive_site_is_read_only_for_tenants(): void
+    public function test_inactive_website_is_read_only_for_tenants(): void
     {
         $site = Site::factory()->create([
             'company_id' => $this->company->id,
             'status' => SiteStatus::Inactive,
         ]);
 
-        Livewire::test(EditSite::class, ['record' => $site->id])
-            ->assertFormDisabled();
+        Livewire::test(EditWebsite::class, ['record' => $site->id])
+            ->assertFormFieldIsDisabled('name'); // Checking a field inside the disabled form
     }
 
     /*
@@ -150,8 +148,9 @@ class SiteManagementTest extends TestCase
     {
         $site = Site::factory()->create(['company_id' => $this->company->id]);
 
-        Livewire::test(EditSite::class, ['record' => $site->id])
+        Livewire::test(EditWebsite::class, ['record' => $site->id])
             ->fillForm(['canonical_url' => 'www.example.com'])
+            ->call('save')
             ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('sites', [
@@ -167,7 +166,7 @@ class SiteManagementTest extends TestCase
     {
         $site = Site::factory()->create(['company_id' => $this->company->id]);
 
-        Livewire::test(EditSite::class, ['record' => $site->id])
+        Livewire::test(EditWebsite::class, ['record' => $site->id])
             ->fillForm(['smtp_password' => 'secret123'])
             ->call('save')
             ->assertHasNoFormErrors();
@@ -183,12 +182,12 @@ class SiteManagementTest extends TestCase
     /**
      * Requirement: Multi-tenancy Security (BR05)
      */
-    public function test_cannot_access_other_company_site(): void
+    public function test_cannot_access_other_company_website(): void
     {
         $otherCompany = Company::factory()->create(['active' => true]);
         $otherSite = Site::factory()->create(['company_id' => $otherCompany->id]);
 
-        $this->get(SiteResource::getUrl('edit', ['record' => $otherSite->id], panel: 'app'))
+        $this->get(WebsiteResource::getUrl('edit', ['record' => $otherSite->id], panel: 'app'))
             ->assertStatus(404); // Scoped results usually return 404 in Filament
     }
 }

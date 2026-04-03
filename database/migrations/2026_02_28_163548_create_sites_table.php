@@ -16,7 +16,7 @@ return new class extends Migration
 
             // Basic Settings
             $table->string('name');
-            $table->enum('status', ['development', 'production', 'inactive'])->default('development');
+            $table->enum('status', ['development', 'production', 'maintenance', 'inactive'])->default('development');
 
             // Branding & Visuals (JSON)
             $table->json('visual_settings')->nullable();

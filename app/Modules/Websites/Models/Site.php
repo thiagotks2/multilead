@@ -2,8 +2,8 @@
 
 namespace App\Modules\Websites\Models;
 
-use App\Modules\Websites\Enums\SiteStatus;
 use App\Modules\Identity\Models\Company;
+use App\Modules\Websites\Enums\SiteStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

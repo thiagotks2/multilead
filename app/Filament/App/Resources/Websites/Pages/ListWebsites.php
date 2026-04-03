@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\App\Resources\Sites\Pages;
+namespace App\Filament\App\Resources\Websites\Pages;
 
-use App\Filament\App\Resources\Sites\SiteResource;
+use App\Filament\App\Resources\Websites\WebsiteResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
-class ListSites extends ListRecords
+class ListWebsites extends ListRecords
 {
-    protected static string $resource = SiteResource::class;
+    protected static string $resource = WebsiteResource::class;
 
     protected function getHeaderActions(): array
     {

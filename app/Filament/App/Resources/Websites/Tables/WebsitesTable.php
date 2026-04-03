@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\AdminPanel\Resources\Companies\RelationManagers;
+namespace App\Filament\App\Resources\Websites\Tables;
 
 use App\Modules\Websites\Enums\SiteStatus;
 use App\Modules\Websites\Models\Site;
@@ -8,35 +8,17 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SitesRelationManager extends RelationManager
+class WebsitesTable
 {
-    protected static string $relationship = 'sites';
-
-    public function form(Schema $schema): Schema
-    {
-        return \App\Filament\Schemas\SiteForm::configure($schema);
-    }
-
-    public function table(Table $table): Table
+    public static function configure(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
@@ -53,9 +35,6 @@ class SitesRelationManager extends RelationManager
             ])
             ->filters([
                 TrashedFilter::make(),
-            ])
-            ->headerActions([
-                CreateAction::make(),
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -74,16 +53,13 @@ class SitesRelationManager extends RelationManager
                         ->action(fn (Site $record) => $record->update(['status' => SiteStatus::Development]))
                         ->requiresConfirmation()
                         ->visible(fn (Site $record) => $record->status !== SiteStatus::Development),
-                    Action::make('setInactive')
-                        ->label('Set Inactive')
-                        ->icon('heroicon-o-x-circle')
-                        ->color('danger')
-                        ->action(fn (Site $record) => $record->update(['status' => SiteStatus::Inactive]))
+                    Action::make('setMaintenance')
+                        ->label('Set Maintenance')
+                        ->icon('heroicon-o-pause-circle')
+                        ->color('info')
+                        ->action(fn (Site $record) => $record->update(['status' => SiteStatus::Maintenance]))
                         ->requiresConfirmation()
-                        ->visible(fn (Site $record) => $record->status !== SiteStatus::Inactive),
-                    DeleteAction::make(),
-                    ForceDeleteAction::make(),
-                    RestoreAction::make(),
+                        ->visible(fn (Site $record) => $record->status !== SiteStatus::Maintenance),
                 ]),
             ])
             ->toolbarActions([
@@ -100,20 +76,14 @@ class SitesRelationManager extends RelationManager
                         ->color('warning')
                         ->action(fn (\Illuminate\Database\Eloquent\Collection $records) => $records->each->update(['status' => SiteStatus::Development]))
                         ->requiresConfirmation(),
-                    BulkAction::make('setInactiveBulk')
-                        ->label('Set Inactive')
-                        ->icon('heroicon-o-x-circle')
-                        ->color('danger')
-                        ->action(fn (\Illuminate\Database\Eloquent\Collection $records) => $records->each->update(['status' => SiteStatus::Inactive]))
+                    BulkAction::make('setMaintenanceBulk')
+                        ->label('Set Maintenance')
+                        ->icon('heroicon-o-pause-circle')
+                        ->color('info')
+                        ->action(fn (\Illuminate\Database\Eloquent\Collection $records) => $records->each->update(['status' => SiteStatus::Maintenance]))
                         ->requiresConfirmation(),
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
-            ])
-            ->modifyQueryUsing(fn (Builder $query) => $query
-                ->withoutGlobalScopes([
-                    SoftDeletingScope::class,
-                ]));
+            ]);
     }
 }

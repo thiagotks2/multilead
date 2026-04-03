@@ -8,6 +8,7 @@ enum SiteStatus: string implements HasLabel
 {
     case Development = 'development';
     case Production = 'production';
+    case Maintenance = 'maintenance';
     case Inactive = 'inactive';
 
     public function getLabel(): ?string
@@ -15,6 +16,7 @@ enum SiteStatus: string implements HasLabel
         return match ($this) {
             self::Development => 'Development',
             self::Production => 'Production',
+            self::Maintenance => 'Maintenance',
             self::Inactive => 'Inactive',
         };
     }
