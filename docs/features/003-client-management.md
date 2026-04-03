@@ -1,7 +1,7 @@
 # Feature: Client Management & CRM
 
 ## 0. Context & References
-- **ADR Link:** [002-client-module-boundaries.md](file:///Users/thiagocardoso/projetos/www/multilead/docs/adr/002-client-module-boundaries.md)
+- **ADR Link:** [002-client-module-boundaries.md](../adr/002-client-module-boundaries.md)
 - **Status:** Implemented
 - **Stakeholders:** Users, Agents, Tenants
 

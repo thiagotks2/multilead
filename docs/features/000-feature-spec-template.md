@@ -1,43 +1,52 @@
 
 # Feature: [Feature Name]
 
+## 0. Context & References
+- **ADR Link:** [Link to related ADR]
+- **Status:** [Draft | Approved | Implemented]
+- **Stakeholders:** [Name of stakeholders]
+
 ## 1. Description
 Brief summary of what the feature does and what is the value for the user (User Story).
 *Example: As a broker, I want to convert a Lead into an Opportunity to start the sales process.*
 
 ## 2. Business Rules
-- BR01: 
+- **BR01:** 
 
 ## 3. Technical Specification
-- **Endpoint/Command:** `POST /api/leads/{id}/convert` or `LeadService->convert($lead)`
-- **Expected Payload:** `{ "value": 150000, "close_date": "2026-12-31" }`
-- **Affected Tables:** `opportunities`, `activities`.
+- **Module Path:** `app/Modules/[ModuleName]/`
+- **Affected Tables:** `table_name`
+- **Models/Actions:** `ActionName::handle()`
+- **UI Components Scope:** [Shared between Panels | Exclusive to {{Panel}}] (Mandatory: Specify if schemas should be global in `app/Filament/Schemas/` or local).
 
-## 4. Test Scenarios
-### Happy Path: Successful Conversion
-- **Given** that I have a lead with 'new' status
-- **When** I execute the conversion action
-- **Then** a record in the `opportunities` table must be created
-- **And** the lead status must change to 'converted'
+## 4. UI & Navigation (Filament)
+- **Panel:** [App | Admin]
+- **Navigation:** Group: [GroupName], Label: [Label], Icon: [Icon]
+- **Resource Features:**
+    - List: [Tabs, Filters, Table Columns]
+    - View: [Infolists, Tabs, Widgets]
+    - Form: [Modal or Screen, Layout]
 
-### Failure Scenario: Lead already converted
-- **Given** a lead already has the 'converted' status
-- **When** I try to convert again
-- **Then** the system must return a 422 error (Unprocessable Entity)
+## 5. Test Scenarios (TDD)
+### Happy Path: [Scenario Name]
+- **Given** [Precondition]
+- **When** [Action]
+- **Then** [Expectation]
 
+> [!IMPORTANT]
+> **Filament Testing Requirements:**
+> All feature specifications MUST define test scenarios for Filament resources (forms, tables, actions, and tabs). These scenarios must be covered by Livewire/Filament feature tests.
+
+## 6. Visual Domain Schema
 ```mermaid
-sequenceDiagram
-    participant User as Broker
-    participant Controller as LeadController
-    participant Service as LeadService
-    participant DB as Database
-
-    User->>Controller: Requests conversion
-    Controller->>Service: convert($leadId)
-    Service->>DB: Checks current status
-    Note over Service,DB: If status != 'new' throw Exception
-    Service->>DB: Creates Opportunity
-    Service->>DB: Updates Lead Status
-    Service-->>Controller: Returns Success
-    Controller-->>User: Displays success message
+erDiagram
+    ENTITY1 ||--o{ ENTITY2 : "relationship"
 ```
+
+## 7. Definition of Done (DoD)
+- [ ] Feature documentation aligned with actual implementation.
+- [ ] TDD: Feature tests covering all happy and failure paths.
+- [ ] Logic implemented in Actions (if complex).
+- [ ] Linting and formatting pass (Laravel Pint).
+- [ ] Activity logs implemented for all CRUD/Actions.
+- [ ] Project State updated.
