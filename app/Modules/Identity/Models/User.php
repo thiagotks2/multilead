@@ -2,8 +2,7 @@
 
 namespace App\Modules\Identity\Models;
 
-use App\Modules\Clients\Models\Client;
-
+use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasTenants;
@@ -11,22 +10,24 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, LogsActivity, Notifiable, SoftDeletes;
 
-    protected static function newFactory()
+    protected static function newFactory(): UserFactory
     {
-        return \Database\Factories\UserFactory::new();
+        return UserFactory::new();
     }
 
     public function getActivitylogOptions(): LogOptions
@@ -38,7 +39,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
             ->useLogName('user');
     }
 
-    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
+    public function tapActivity(Activity $activity, string $eventName)
     {
         if (isset($activity->subject->company_id)) {
             $activity->company_id = $activity->subject->company_id;
@@ -119,7 +120,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
         return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
     }
 
-    public function clients(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function clients(): HasMany
     {
         return $this->hasMany(Client::class);
     }

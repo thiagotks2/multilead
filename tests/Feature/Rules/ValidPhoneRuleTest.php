@@ -13,7 +13,7 @@ class ValidPhoneRuleTest extends TestCase
     public function it_passes_validation_for_valid_brazilian_phones(): void
     {
         $data = ['phone' => '11991223344'];
-        $rules = ['phone' => [new ValidPhone()]];
+        $rules = ['phone' => [new ValidPhone]];
 
         $validator = Validator::make($data, $rules);
 
@@ -24,7 +24,7 @@ class ValidPhoneRuleTest extends TestCase
     public function it_passes_validation_for_valid_international_phones(): void
     {
         $data = ['phone' => '120255501234'];
-        $rules = ['phone' => [new ValidPhone()]];
+        $rules = ['phone' => [new ValidPhone]];
 
         $validator = Validator::make($data, $rules);
 
@@ -38,7 +38,7 @@ class ValidPhoneRuleTest extends TestCase
     public function it_fails_validation_for_invalid_phones(): void
     {
         $data = ['phone' => 'abc-1234'];
-        $rules = ['phone' => [new ValidPhone()]];
+        $rules = ['phone' => [new ValidPhone]];
 
         $validator = Validator::make($data, $rules);
 

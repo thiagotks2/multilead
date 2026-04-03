@@ -2,6 +2,9 @@
 
 namespace App\Modules\Clients\Models;
 
+use App\Modules\Identity\Models\Company;
+use App\Modules\Identity\Models\User;
+use Database\Factories\ClientFactory;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +16,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Client extends Model
 {
-    /** @use HasFactory<\Database\Factories\ClientFactory> */
+    /** @use HasFactory<ClientFactory> */
     use HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
@@ -56,9 +59,9 @@ class Client extends Model
         }
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): ClientFactory
     {
-        return \Database\Factories\ClientFactory::new();
+        return ClientFactory::new();
     }
 
     public function company(): BelongsTo

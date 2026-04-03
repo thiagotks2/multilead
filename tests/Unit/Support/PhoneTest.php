@@ -85,7 +85,7 @@ class PhoneTest extends TestCase
 
         // Brazilian (Local/Regional via toDatabase then toHuman)
         $this->assertEquals('+55 (41) 3212-4455', Phone::toHuman('554132124455'));
-        
+
         // International
         $this->assertEquals('+120255501234', Phone::toHuman('120255501234'));
     }

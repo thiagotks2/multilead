@@ -1,0 +1,134 @@
+.timeline-container {
+    position: relative;
+    padding-left: 1rem;
+    margin-top: 1rem;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background-color: var(--fi-color-gray-200, #e5e7eb);
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -16px;
+    top: 4px;
+    height: 12px;
+    width: 12px;
+    border-radius: 9999px;
+    border: 2px solid var(--primary-500, #3b82f6);
+    background-color: #ffffff;
+}
+
+.timeline-content {
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.timeline-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.timeline-user {
+    font-weight: 600;
+    color: var(--primary-600, #2563eb);
+}
+
+.timeline-time {
+    font-size: 0.75rem;
+    color: var(--fi-color-gray-500, #6b7280);
+}
+
+.timeline-data-box {
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    background-color: var(--fi-color-gray-50, #f9fafb);
+    border: 1px solid var(--fi-color-gray-100, #f3f4f6);
+}
+
+.timeline-data-title {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    color: var(--fi-color-gray-500, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .timeline-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.data-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-label {
+    font-size: 0.75rem;
+    color: var(--fi-color-gray-400, #9ca3af);
+}
+
+.data-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.timeline-empty {
+    font-size: 0.875rem;
+    font-style: italic;
+    color: var(--fi-color-gray-500, #6b7280);
+    padding: 1rem 0;
+}
+
+.data-diff-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.data-diff-old {
+    font-size: 0.875rem;
+    text-decoration: line-through;
+    color: var(--fi-color-danger-500, #ef4444);
+    opacity: 0.8;
+}
+
+.data-diff-arrow {
+    font-size: 0.75rem;
+    color: var(--fi-color-gray-400, #9ca3af);
+}
+
+.data-diff-new {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--fi-color-success-600, #16a34a);
+}

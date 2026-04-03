@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
 use App\Modules\Clients\Models\Client;
+use App\Modules\Identity\Models\Company;
+use App\Modules\Identity\Models\User;
 use Illuminate\Database\Seeder;
 
 class DevClientSeeder extends Seeder
@@ -16,26 +17,25 @@ class DevClientSeeder extends Seeder
         $companies = Company::all();
 
         if ($companies->isEmpty()) {
-            $companies = Company::factory(2)->create();
+            $companies = collect([
+                Company::factory()->create(['name' => 'Default Company', 'active' => true]),
+            ]);
         }
 
-        foreach ($companies as $company) {
-            // 1. Company Clients (Shared)
+        $companies->each(function (Company $company) {
+            // Shared/Company clients (Section 5.1)
             Client::factory(5)->create([
                 'company_id' => $company->id,
                 'user_id' => null,
             ]);
 
-            // 2. Exclusive Clients (Assigned to specific users)
-            $users = $company->users;
-
-            if ($users->isNotEmpty()) {
-                foreach ($users as $user) {
-                    Client::factory(3)->exclusive($user)->create([
-                        'company_id' => $company->id,
-                    ]);
-                }
-            }
-        }
+            // Exclusive clients for each user in the company (Section 5.2)
+            $company->users->each(function (User $user) use ($company) {
+                Client::factory(3)->create([
+                    'company_id' => $company->id,
+                    'user_id' => $user->id,
+                ]);
+            });
+        });
     }
 }

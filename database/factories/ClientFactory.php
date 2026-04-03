@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Modules\Clients\Models\Client;
 use App\Modules\Identity\Models\Company;
 use App\Modules\Identity\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Modules\Clients\Models\Client;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\Clients\Models\Client>
@@ -26,7 +26,7 @@ class ClientFactory extends Factory
             'user_id' => null,
             'name' => fake()->name(),
             'email' => fake()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
+            'phone' => '55'.fake()->numberBetween(11, 99).'9'.fake()->numberBetween(1000, 9999).fake()->numberBetween(1000, 9999),
             'notes' => fake()->paragraph(),
             'address' => [
                 'country' => 'Brasil',

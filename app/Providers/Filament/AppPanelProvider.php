@@ -87,5 +87,10 @@ class AppPanelProvider extends PanelProvider
             'panels::sidebar.collapse-button' => 'heroicon-o-bars-3',
             'panels::sidebar.expand-button' => 'heroicon-o-bars-3',
         ]);
+
+        // Registrar os assets customizados de componentes Livewire (MFC) que precisamos que o Filament carregue
+        \Filament\Support\Facades\FilamentAsset::register([
+            \Filament\Support\Assets\Css::make('activity-timeline', resource_path('views/livewire/app-panel/clients/activity-timeline.css')),
+        ]);
     }
 }

@@ -2,25 +2,26 @@
 
 namespace App\Modules\Identity\Models;
 
-use App\Modules\Identity\Enums\DocumentType;
 use App\Modules\Clients\Models\Client;
 use App\Modules\CRM\Models\Pipeline;
-use App\Modules\Identity\Models\User;
+use App\Modules\Identity\Enums\DocumentType;
 use App\Modules\Websites\Models\Site;
+use Database\Factories\CompanyFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model
 {
     use HasFactory, LogsActivity, SoftDeletes;
 
-    protected static function newFactory()
+    protected static function newFactory(): CompanyFactory
     {
-        return \Database\Factories\CompanyFactory::new();
+        return CompanyFactory::new();
     }
 
     public function getActivitylogOptions(): LogOptions
@@ -32,7 +33,7 @@ class Company extends Model
             ->useLogName('company');
     }
 
-    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName)
+    public function tapActivity(Activity $activity, string $eventName)
     {
         if (isset($activity->subject->id)) {
             $activity->company_id = $activity->subject->id; // For Company, the ID itself is the company_id
