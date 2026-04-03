@@ -137,6 +137,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 # Do Things the Laravel Way
 
 - Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
+- Always use `php artisan make:filament-resource {name}` to create new resources and strictly follow the project's modular directory pattern (Resource/Pages, Resource/Tables, and global Schemas).
 - If you're creating a generic PHP class, use `php artisan make:class`.
 - Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
 
@@ -151,6 +152,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ### Model Creation
 
 - When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `list-artisan-commands` to check the available options to `php artisan make:model`.
+- **Development Environment (DEV):** Always run migrations and relevant seeders during feature development to ensure the local environment has consistent and realistic data for visual verification.
 
 ### APIs & Eloquent Resources
 
@@ -229,6 +231,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - When the tests relating to your feature are passing, ask the user if they would like to also run the entire test suite to make sure everything is still passing.
 - Tests should cover all happy paths, failure paths, and edge cases.
 - You must not remove any tests or test files from the tests directory without approval. These are not temporary or helper files; these are core to the application.
+- **PHP 8+ Attributes**: Always use PHP 8 attributes instead of PHPDoc tags (e.g., use `#[Test]` instead of `/** @test */`). PHPDoc metadata is deprecated in PHPUnit 10+ and will be removed in PHPUnit 12.
 
 ## Running Tests
 
@@ -236,6 +239,9 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - To run all tests: `php artisan test --compact`.
 - To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
 - To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
+
+**CRITICAL RULE: TEST SUCCESS**
+- The developer should only stop developing a feature when ALL related tests are passing (GREEN). This includes both infrastructure and Filament component tests.
 
 === filament/filament rules ===
 
@@ -369,7 +375,54 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 - Actions: `Filament\Actions\` (no `Filament\Tables\Actions\` etc.)
 - Icons: `Filament\Support\Icons\Heroicon` enum (e.g., `Heroicon::PencilSquare`)
 
-**Recent breaking changes to Filament:**
+### Filament v4 Resource Patterns
+
+In Filament v4, defining forms and infolists has been unified under a new **Schema** core. Resources now utilize `Filament\Schemas\Schema` objects.
+
+<code-snippet name="Filament v4 Resource Signatures" lang="php">
+use Filament\Schemas\Schema;
+use Filament\Tables\Table;
+use UnitEnum;
+use BackedEnum;
+
+class MyResource extends Resource
+{
+    protected static ?string $model = MyModel::class;
+
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-users';
+
+    protected static string | UnitEnum | null $navigationGroup = 'CRM';
+
+    public static function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                // ... layout components and form fields
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([ ... ])
+            ->filters([ ... ]);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                // ... layout components and entries
+            ]);
+    }
+}
+</code-snippet>
+
+**Breaking Changes & Best Practices in v4:**
+- **Schema instead of Form/Infolist**: Always use `Filament\Schemas\Schema` for `form()` and `infolist()`.
+- **Property Type Hints**: Static properties like `$navigationIcon` and `$navigationGroup` MUST have explicit union type hints (`string|BackedEnum|null` / `string|UnitEnum|null`) to avoid PHP Fatal Errors during property override.
+- **Components Method**: Use `->components([...])` instead of `->schema([...])` when configuring the top-level `Schema` object.
+- **Isolated Schemas**: It is highly recommended to store reusable form/table definitions in `app/Filament/Schemas/` and `app/Filament/Tables/` respectively.
 - File visibility is `private` by default. Use `->visibility('public')` for public access.
 - `Grid`, `Section`, and `Fieldset` no longer span all columns by default.
 
@@ -398,18 +451,31 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 - Isolation: Never mix Admin/App resources.
 - DRY Schemas: Store reusable form/table components in app/Filament/Schemas/.
 - Logic: Resources invoke Actions only when business rules exceed basic CRUD.
+- Shared Schemas: The `app/Filament/Schemas/` directory is RESERVED for schemas (forms/infolists) that are shared across multiple panels (e.g., Admin and App). 
+- Local Schemas: If a schema is exclusive to a specific resource in a single panel, it must be stored in `app/Filament/{Panel}/Resources/{Resource}/Schemas/`.
 
 ## 5. Quality & TDD (Red-Green-Refactor)
 - Test Location: Root tests/ directory, organized by module (e.g., tests/Feature/Modules/{Module}).
 - TDD: Write tests BEFORE implementing logic > CRUD.
-- Formatting: Strict PSR-12 via Laravel Pint.
+- Format: Strict PSR-12 via Laravel Pint.
+- Table Actions: In the **App** panel, all table actions MUST be wrapped in an `ActionGroup` to maintain UI consistency and cleaner layouts.
 
 === multilead documentation rules ===
 
 # Documentation Strategy & Language
 - EVERYTHING must be documented in English. Do not write Portuguese in documentation files or codebase comments.
 - **Granular Feature Documentation**: Located in `docs/features/`. Use the template `000-feature-spec-template.md`. Align 1:1 with PHPUnit Feature Tests.
+- **Filament Testing Requirements**: All feature specifications MUST define test scenarios for Filament resources (forms, tables, actions, and tabs) as part of the "Test Scenarios" section.
 - **Architecture Decision Records (MADR)**: Placed in `docs/adr/`. Each atomic decision must be documented following the MADR structure.
 - **C4 Model (Visual Architecture)**: Visual structure placed in `docs/architecture/` (.md extensions using Mermaid). Separate diagrams for System Context (Level 1) and Containers (Level 2) to maintain micro-docs philosophy.
+- **Project State Tracking**: Mandatory file `docs/project-state.md` must be updated after every feature completion or significant architectural shift.
+
+## Development Workflow (Pragmatic TDD)
+1. **Documentation Phase**: Create or update the Feature Spec in `docs/features/`. Define UI, Business Rules, and Test Scenarios.
+2. **Red Test Phase**: Write the PHPUnit Feature Test based on the Spec scenarios. Run it and ensure it fails.
+3. **Implementation Phase**: Implement the minimal code (Migration, Model, Action, Filament Resource) to pass the test.
+4. **Green Test Phase**: Run the tests. Once they pass, ensure they cover all paths.
+5. **Refactor Phase**: Clean up the code and tests. Update documentation if any technical details changed during implementation.
+6. **Persistence**: Update `docs/project-state.md` to reflect the new state.
 
 </laravel-boost-guidelines>
