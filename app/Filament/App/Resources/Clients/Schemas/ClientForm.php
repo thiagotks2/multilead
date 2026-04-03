@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Resources\Clients\Schemas;
 
+use App\Filament\CustomComponents\Forms\PhoneInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -10,7 +11,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\Rules\Unique;
-use App\Filament\CustomComponents\Forms\PhoneInput;
 
 class ClientForm
 {

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class AdminFactory extends Factory
 {
     protected $model = \App\Modules\Identity\Models\Admin::class;
+
     /**
      * Define the model's default state.
      *

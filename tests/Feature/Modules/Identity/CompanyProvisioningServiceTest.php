@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Modules\Identity;
 
-use App\Modules\Identity\Models\Company;
 use App\Modules\CRM\Models\Pipeline;
+use App\Modules\Identity\Models\Company;
 use App\Modules\Identity\Services\CompanyProvisioningService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 use App\Modules\CRM\Models\Pipeline;
 use App\Modules\CRM\Models\PipelineStage;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Modules\CRM\Models\PipelineStage>
@@ -13,6 +12,7 @@ use App\Modules\CRM\Models\PipelineStage;
 class PipelineStageFactory extends Factory
 {
     protected $model = PipelineStage::class;
+
     /**
      * Define the model's default state.
      *

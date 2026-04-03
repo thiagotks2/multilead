@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Resources\Clients\Schemas;
 
+use App\Filament\CustomComponents\Infolists\PhoneEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Schemas\Components\Grid;
@@ -9,7 +10,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
-use App\Filament\CustomComponents\Infolists\PhoneEntry;
 
 class ClientInfolist
 {

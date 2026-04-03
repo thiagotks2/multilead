@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 use App\Modules\Websites\Models\Site;
 use App\Modules\Websites\Models\SitePostCategory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
@@ -14,6 +13,7 @@ use Illuminate\Support\Str;
 class SitePostCategoryFactory extends Factory
 {
     protected $model = SitePostCategory::class;
+
     /**
      * Define the model's default state.
      *
