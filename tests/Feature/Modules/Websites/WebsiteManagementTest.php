@@ -52,7 +52,8 @@ class WebsiteManagementTest extends TestCase
     {
         $site = Site::factory()->create(['company_id' => $this->company->id]);
 
-        $this->assertEquals('Website Settings', WebsiteResource::getNavigationLabel());
+        $this->assertEquals('Website', WebsiteResource::getNavigationLabel());
+        $this->assertNull(WebsiteResource::getNavigationGroup());
         $this->assertStringContainsString("/websites/{$site->id}/edit", WebsiteResource::getNavigationUrl());
     }
 
