@@ -13,8 +13,8 @@ A **Website** represents an external-facing digital asset for a client (Tenant).
 - **BR02 (Shared Management):** Once created, a Website's details can be edited by the tenant (App Panel) or Platform Administrators.
 - **BR03 (Observability):** All changes to sensitive data (SMTP, Scripts) must be logged via `spatie/laravel-activitylog`.
 - **BR04 (Unitary vs. Multiple Websites UI):**
-    - **Single Website:** The navigation points directly to the Edit page, labeled "Website Settings".
-    - **Multiple Websites:** The navigation points to an Index list, labeled "My Websites".
+    - **Single Website:** The navigation points directly to the Edit page, labeled "**Website**", and is NOT grouped.
+    - **Multiple Websites:** The navigation points to an Index list, labeled "**My Websites**", grouped under "Websites".
 - **BR05 (Data Isolation):** A tenant can only view/edit websites belonging to their `Company`.
 - **BR06 (Status Transitions):**
     - Tenants (App Panel) can freely move a website between `Development`, `Production`, and `Maintenance`.
@@ -51,12 +51,12 @@ A **Website** represents an external-facing digital asset for a client (Tenant).
 
 ### App Panel (Tenant Context)
 - **Navigation:**
-    - **Group:** "Websites"
-    - **Label:** Dynamic ("Website Settings" or "My Websites")
+    - **Group:** Dynamic (None for 1 site, "Websites" for >1 sites)
+    - **Label:** Dynamic ("Website" for 1 site, "My Websites" for >1 sites)
     - **Icon:** `heroicon-o-globe-alt`
 - **Behavior:**
-    - If the tenant has exactly one website, the menu item links directly to the **Edit** page.
-    - If the tenant has multiple websites, the menu item links to the **List** page.
+    - If the tenant has exactly one website, the menu item appears in the root sidebar and links directly to the **Edit** page.
+    - If the tenant has multiple websites, menu items are grouped and link to the **List** page.
 
 ### Admin Panel (Platform Context)
 - **Navigation:** Managed via `RelationManager` inside the [CompaniesResource](../../app/Filament/AdminPanel/Resources/Companies/CompaniesResource.php).
@@ -74,7 +74,7 @@ The [WebsiteForm](../../app/Filament/Schemas/WebsiteForm.php) is organized into:
 
 ### Happy Path: Navigation Redirection (App Panel)
 - **Given** an authenticated tenant with exactly one website
-- **When** the user clicks the "Website Settings" menu item
+- **When** the user clicks the "Website" menu item in the root sidebar
 - **Then** they must be redirected directly to the Edit form for that website
 
 ### Happy Path: Website Update (App Panel)
