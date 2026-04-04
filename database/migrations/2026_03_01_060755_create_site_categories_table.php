@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('site_post_categories', function (Blueprint $table) {
+        Schema::create('site_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('type')->default('general');
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();
             $table->unique(['site_id', 'slug']);
             $table->json('seo_settings')->nullable();
-            $table->json('script_settings')->nullable();
+            $table->json('scripts')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('site_post_categories');
+        Schema::dropIfExists('site_categories');
     }
 };

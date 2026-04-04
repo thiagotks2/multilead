@@ -83,9 +83,9 @@ class Site extends Model
         return $this->hasMany(SiteBannerPlace::class);
     }
 
-    public function postCategories(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function categories(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(SitePostCategory::class);
+        return $this->hasMany(SiteCategory::class);
     }
 
     public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany

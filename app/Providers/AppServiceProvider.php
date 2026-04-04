@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::morphMap([
-            'site_post_category' => \App\Modules\Websites\Models\SitePostCategory::class,
+            'site_category' => \App\Modules\Websites\Models\SiteCategory::class,
         ]);
 
         Livewire::component('edit_profile_form', EditProfileForm::class);
