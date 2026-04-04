@@ -16,4 +16,11 @@ class EditWebsite extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction(),
+        ];
+    }
 }

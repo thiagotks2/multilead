@@ -5,9 +5,12 @@ namespace App\Filament\App\Resources\Websites;
 use App\Filament\App\Resources\Websites\Pages\CreateWebsite;
 use App\Filament\App\Resources\Websites\Pages\EditWebsite;
 use App\Filament\App\Resources\Websites\Pages\ListWebsites;
+use App\Filament\App\Resources\Websites\SiteCategories\SiteCategoryResource;
 use App\Filament\App\Resources\Websites\Tables\WebsitesTable;
 use App\Modules\Websites\Models\Site;
 use BackedEnum;
+use Filament\Navigation\NavigationItem;
+use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -21,6 +24,27 @@ class WebsiteResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-globe-alt';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
+
+    public static function getRecordSubNavigation(\Filament\Resources\Pages\Page $page): array
+    {
+        return static::getSiteSubNavigation($page->getRecord());
+    }
+
+    public static function getSiteSubNavigation(Site $record): array
+    {
+        return [
+            NavigationItem::make('General Settings')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->url(static::getUrl('edit', ['record' => $record]))
+                ->isActiveWhen(fn () => request()->routeIs('*.websites.edit')),
+            NavigationItem::make('Categories')
+                ->icon('heroicon-o-tag')
+                ->url(SiteCategoryResource::getUrl('index', ['site' => $record]))
+                ->isActiveWhen(fn () => request()->routeIs('*.websites.site-categories.index')),
+        ];
+    }
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -36,6 +60,10 @@ class WebsiteResource extends Resource
     public static function getNavigationLabel(): string
     {
         $tenant = filament()->getTenant();
+
+        if ($tenant && $tenant->sites()->count() === 1) {
+            return 'Website';
+        }
 
         if ($tenant && $tenant->sites()->count() > 1) {
             return 'My Websites';
@@ -59,6 +87,12 @@ class WebsiteResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
+        $tenant = filament()->getTenant();
+
+        if ($tenant && $tenant->sites()->count() === 1) {
+            return null;
+        }
+
         return 'Websites';
     }
 
