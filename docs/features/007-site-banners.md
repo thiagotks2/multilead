@@ -10,15 +10,12 @@
 A **Site Banner** represents a visual asset (image) and call-to-action (link/button) displayed on a website. Banners are classified by a `BannerType` enum that defines their behavioral purpose — such as a general static image, an entry popup, or an exit intent overlay. This allows clients to manage dynamic promotional content without modifying source code.
 
 ## 2. Business Rules
-- **BR01 (Type Classification):** A Banner must have a `type` from the `BannerType` enum. The type determines how the front-end renders and triggers the banner:
-    - **`general`:** Static banner displayed in a fixed layout position. No behavioral trigger.
-    - **`entry_popup`:** Modal shown immediately when the user loads the site.
-    - **`exit_intent`:** Modal triggered when the user's cursor moves toward the browser chrome (intent to leave).
+- **BR01 (Type Classification):** A Banner must have a `type` from the `BannerType` enum. Defaults to `general`.
 - **BR02 (Expirability):** Banners can optionally have a `display_until` date. Once this date passes, the system must logically hide the banner from front-end API responses without physically deleting the record.
 - **BR03 (Observability):** Changes to banners (especially swapping images or changing target links) must be logged via `spatie/laravel-activitylog` mapped to the tenant Company.
-- **BR04 (Image Storage - Relative Only):** Database records MUST NOT store absolute paths or full directory structures. Only the unique filename (hash-42-7.jpg) is persisted in the `image_path` column.
-- **BR05 (Image Optimization):** On creation, a Model Observer dispatches an `ImageOptimizationRequested` event that triggers the `ImageOptimizerService` asynchronously. See ADR 017 for rules.
-- **BR06 (Strict Media Policy):** The system implements a central media format definition. Only `image/png` and `image/jpeg` MIME types are accepted. Any other format must be rejected at the validation layer before processing.
+- **BR04 (Image Storage - Relative Only):** Database records MUST NOT store absolute paths. Only the filename (hash) is persisted.
+- **BR05 (Mandatory Data):** ONLY the `image_path` (image file) is mandatory for banner creation. All other fields (title, description, link) are optional.
+- **BR06 (Strict Media Policy):** Only `image/png` and `image/jpeg` MIME types are accepted. Rejection must happen before processing.
 
 ## 3. Technical Specification
 - **Module Path:** `app/Modules/Websites/`
@@ -64,28 +61,21 @@ A **Site Banner** represents a visual asset (image) and call-to-action (link/but
         - `display_until`: Date/time picker (optional)
 
 ## 5. Test Scenarios (TDD)
-### Happy Path: Adding a new Banner
-- **Given** an active site belonging to a Company
-- **When** a user opens the creation modal, selects type "Entry Popup", uploads a PNG/JPG image, and saves
-- **Then** the `site_banners` table reflects the new record with `type = entry_popup`
-- **And** the image is stored under `{company_id}/{site_id}/banners/`
-- **And** an `ImageOptimizationRequested` event is dispatched
-- **And** the activity log registers the upload event
+### Happy Path: Adding a new Banner (Minimal Data)
+- **Given** an active site
+- **When** a user uploads a valid PNG/JPG image and saves WITHOUT title or description
+- **Then** the record is created successfully (only image is mandatory)
 
-### Happy Path: Filtering by Type Tab
-- **Given** banners of type "General" and "Entry Popup" exist on the site
-- **When** the user clicks the "Entry Popup" tab in the Banner list
-- **Then** the table must only show banners with `type = entry_popup`
+### Happy Path: Isolation (Multi-tenant)
+- **Given** banners exist in Company A and Company B
+- **When** a user from Company A logs into the App Panel
+- **Then** they MUST ONLY see banners belonging to Company A sites
+- **And** any attempt to access a banner ID from Company B via URL/API must be denied (404/403)
 
-### Failure Scenario: Expired Banner Excluded from API
-- **Given** a Banner with a `display_until` date in the past
-- **When** the front-end queries active banners of that type
-- **Then** the expired Banner is excluded from the returned collection
-
-### Failure Scenario: Invalid File Format
-- **Given** a user attempts to upload a `.webp` or `.gif` file
-- **When** the upload form is submitted
-- **Then** validation must reject the file with an appropriate error message
+### Failure Scenario: Strict Media Policy
+- **Given** a user attempts to upload a `.gif` or `.webp` file
+- **When** the form is submitted
+- **Then** validation must reject the file (Policy: only PNG/JPG allowed)
 
 > [!IMPORTANT]
 > **Filament Testing Requirements:**
