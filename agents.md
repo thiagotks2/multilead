@@ -9,7 +9,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.5.3
+- php - 8.2
 - filament/filament (FILAMENT) - v4
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
@@ -23,10 +23,11 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 ## Docker & Command Execution
 
-- **CRITICAL**: All commands (Artisan, Composer, PHPUnit, etc.) MUST be executed INSIDE the Docker container.
-- Use the following command format: `docker exec -it multilead ash -c "YOUR_COMMAND"`
-- This applies to creating files, moving files, running tests, and any other operation that affects the application state.
-- NEVER run commands directly on the host machine.
+- **CRITICAL**: All commands MUST be executed inside the `multilead` container.
+- **NO TTY**: Never use `-it` or `-t`. Use only `docker exec`.
+- **USER**: Always run as `www-data` to maintain file permissions.
+- **FORMAT**: `docker exec --user www-data multilead php artisan YOUR_COMMAND`
+- NEVER run commands directly on the host.
 
 ## Conventions
 
