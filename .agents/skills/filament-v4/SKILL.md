@@ -34,15 +34,15 @@ O Flash costuma usar helpers antigos. Siga estes padrões da v4:
 
 ### Setup de Teste:
 - **Traits:** Use `InteractsWithResources`, `InteractsWithPages`, ou `InteractsWithSchemas` conforme o contexto.
-- **Boot:** Certifique-se de que o usuário está autenticado com `$this->actingAs($user)`.
+- **Boot:** Certifique-se de que o usuário está autenticado com `$this->actingAs($user, 'user')` e o tenant/painel estão definidos.
 
 ### Assertions Comuns:
-- **Tables:** `livewire(ListLeads::class)->assertCanSeeTableRecords($leads)`.
-- **Forms:** `livewire(CreateLead::class)->fillForm(['name' => 'Thiago'])->call('create')->assertHasNoFormErrors()`.
-- **Actions:** `livewire(EditLead::class, ['record' => $id])->callAction(DeleteAction::class)`.
+- **Tables:** `Livewire::test(ListLeads::class)->assertCanSeeTableRecords($leads)`.
+- **Forms:** `Livewire::test(CreateLead::class)->fillForm(['name' => 'Thiago'])->call('create')->assertHasNoFormErrors()`.
+- **Actions (Simple Resource):** `Livewire::test(ListBanners::class)->callTableAction('create', $record, [...])`.
 
 ### FLUXO OBRIGATÓRIO PARA TESTES:
 1. **Validar Sintaxe:** Antes de escrever o teste, use o MCP `search-docs` com a query: `["testing resources", "testing tables"]`.
-2. **Gerar Boilerplate:** `docker exec --user www-data multilead php artisan make:test {Name}Test`.
-3. **Implementar:** Use os links de referência internos para estruturar o `livewire()` test helper.
+2. **Setup:** Sempre use `Livewire::test()` importando `Livewire\Livewire`.
+3. **Gerar Boilerplate:** `docker exec --user www-data multilead php artisan make:test {Name}Test`.
 4. **Executar:** `docker exec --user www-data multilead php artisan test --filter {Name}Test`.
