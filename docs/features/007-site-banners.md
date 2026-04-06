@@ -16,9 +16,9 @@ A **Site Banner** represents a visual asset (image) and call-to-action (link/but
     - **`exit_intent`:** Modal triggered when the user's cursor moves toward the browser chrome (intent to leave).
 - **BR02 (Expirability):** Banners can optionally have a `display_until` date. Once this date passes, the system must logically hide the banner from front-end API responses without physically deleting the record.
 - **BR03 (Observability):** Changes to banners (especially swapping images or changing target links) must be logged via `spatie/laravel-activitylog` mapped to the tenant Company.
-- **BR04 (Image Storage):** Banner images are stored locally. The path structure is: `{company_id}/{site_id}/banners/{hash}-{site_id}-{company_id}.{ext}`. Accepted formats: PNG and JPG only.
+- **BR04 (Image Storage - Relative Only):** Database records MUST NOT store absolute paths or full directory structures. Only the unique filename (hash-42-7.jpg) is persisted in the `image_path` column.
 - **BR05 (Image Optimization):** On creation, a Model Observer dispatches an `ImageOptimizationRequested` event that triggers the `ImageOptimizerService` asynchronously. See ADR 017 for rules.
-- **BR06 (Accepted Formats):** Only PNG and JPG files are accepted for upload. Any other format must be rejected at validation time.
+- **BR06 (Strict Media Policy):** The system implements a central media format definition. Only `image/png` and `image/jpeg` MIME types are accepted. Any other format must be rejected at the validation layer before processing.
 
 ## 3. Technical Specification
 - **Module Path:** `app/Modules/Websites/`
@@ -51,6 +51,9 @@ A **Site Banner** represents a visual asset (image) and call-to-action (link/but
         - **"General":** Filters by `BannerType::General`.
         - **"Entry Popup":** Filters by `BannerType::EntryPopup`.
         - **"Exit Intent":** Filters by `BannerType::ExitIntent`.
+    - **Relationships:**
+    - `type()`: `BelongsTo` `BannerType`
+- **Dynamic Path Resolution:** The `SiteBanner` model must implement a virtual attribute (e.g., `full_url` or `storage_path`) that dynamically prepends the tenant-specific directory context `{company_id}/{site_id}/banners/` to the stored `image_path` (filename) using the application's storage configuration.
     - **Form (Modal):**
         - `type`: Select from `BannerType` enum (required)
         - `title`: Text input (required)

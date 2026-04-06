@@ -25,11 +25,16 @@ Banner types are fixed values defined in code as a PHP Backed Enum. They are not
 
 Adding a new type in the future requires a code change and deploy — this is intentional and acceptable for the current product stage.
 
-### Image Storage Strategy
-- Banner images are stored **locally** on the same application server.
-- The physical path structure follows the convention: `{company_id}/{site_id}/banners/{hash}-{site_id}-{company_id}.{ext}`.
-- Accepted file extensions: **png** and **jpg** only.
-- Image filenames must be unique hashes within the folder, suffixed by site ID and company ID separated by hyphens (e.g., `a3f9c2e1-42-7.jpg`).
+### Image Storage & Database Strategy
+- **Relative Storage:** Database records MUST NOT store absolute paths or full directory structures.
+- **Filename Only:** The `image_path` column in `site_banners` should store only the final filename (e.g., `hash-42-7.jpg`).
+- **Dynamic Path Resolution:** The application layer (Model Attributes or App-level Service) is responsible for prepending the tenant-specific directory (`{company_id}/{site_id}/banners/`) when retrieving the URL.
+- **Benefits:** Ensures portability between different disks (local, S3, etc.) and avoids data corruption if company/site IDs were to change.
+
+### Media Validation Policy
+- **Strict Format Enforcement:** Only `image/png` and `image/jpeg` MIME types are allowed.
+- **Format Policy Ownership:** The allowed formats are centrally defined. Any file upload outside this policy must be rejected before reaching the optimization pipeline.
+- **Maximum Longest Edge:** 2560px (as defined in ADR 017).
 
 ### Image Optimization Pipeline
 - After upload, an **Observer** on the `SiteBanner` model dispatches an `ImageOptimizationRequested` event.
