@@ -54,6 +54,7 @@ RUN composer global require laravel/installer
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
 
 COPY ./php-fpm.conf /usr/local/etc/php-fpm.conf
+COPY ./php-custom.ini /usr/local/etc/php/conf.d/custom.ini
 
 RUN mkdir -p /etc/nginx/http.d
 COPY ./default.conf /etc/nginx/http.d/default.conf
