@@ -113,6 +113,7 @@
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.25rem;
+    flex-wrap: wrap;
 }
 
 .data-diff-old {
@@ -120,6 +121,8 @@
     text-decoration: line-through;
     color: var(--fi-color-danger-500, #ef4444);
     opacity: 0.8;
+    word-break: break-word;
+    white-space: pre-wrap;
 }
 
 .data-diff-arrow {
@@ -131,4 +134,13 @@
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--fi-color-success-600, #16a34a);
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.data-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    word-break: break-word;
+    white-space: pre-wrap;
 }

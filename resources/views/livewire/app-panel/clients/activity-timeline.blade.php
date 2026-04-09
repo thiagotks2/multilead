@@ -1,4 +1,6 @@
-<div class="timeline-container">
+<div class="timeline-container"
+     x-data="{}"
+     x-load-css="[@js(\Filament\Support\Facades\FilamentAsset::getStyleHref('activity-timeline'))]">
     <div class="timeline-line"></div>
 
     @foreach($activities as $activity)
