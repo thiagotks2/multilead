@@ -20,8 +20,11 @@ A **Site Banner** represents a visual asset (image) and call-to-action (link/but
 ## 3. Technical Specification
 - **Module Path:** `app/Modules/Websites/`
 - **Affected Tables:** `site_banners`
-- **Enum:** `App\Enums\BannerType` (Backed Enum — values: `general`, `entry_popup`, `exit_intent`)
-- **Models/Actions:** `SiteBanner` uses `HasFactory`, `SoftDeletes`, and `LogsActivity`.
+- **Enum:** `App\Modules\Websites\Enums\BannerType` (Backed Enum — values: `general`, `entry_popup`, `exit_intent`)
+- **Validation Rule:** `App\Modules\Websites\Rules\BannerMediaRule` (BR06)
+- **Model:** `App\Modules\Websites\Models\SiteBanner`
+- **Resource:** `App\Filament\App\Resources\Websites\BannerResource`
+- **Navigation:** Integrated into `WebsiteResource` sub-nav via `site_id` context.
 - **Observer:** `SiteBannerObserver` — on `created`, dispatches `ImageOptimizationRequested` event.
 - **UI Components Scope:** Local to the App Panel, within the `WebsitesCluster`.
 - **Resource Type:** Simple resource (modal-based CRUD — `--simple`).

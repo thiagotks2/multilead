@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('site_banners', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_banner_place_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->foreignId('site_id')->constrained()->cascadeOnDelete();
+            $table->string('type');
+            $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('image_path');
             $table->string('link_url')->nullable();

@@ -11,7 +11,10 @@ use Filament\Navigation\MenuItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Facades\FilamentIcon;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -83,14 +86,14 @@ class AppPanelProvider extends PanelProvider
 
     public function boot(): void
     {
-        \Filament\Support\Facades\FilamentIcon::register([
+        FilamentIcon::register([
             'panels::sidebar.collapse-button' => 'heroicon-o-bars-3',
             'panels::sidebar.expand-button' => 'heroicon-o-bars-3',
         ]);
 
-        // Registrar os assets customizados de componentes Livewire (MFC) que precisamos que o Filament carregue
-        \Filament\Support\Facades\FilamentAsset::register([
-            \Filament\Support\Assets\Css::make('activity-timeline', resource_path('views/livewire/app-panel/clients/activity-timeline.css')),
+        FilamentAsset::register([
+            Css::make('banner-preview', __DIR__.'/../../../resources/views/livewire/app-panel/websites/banner-preview.css')->loadedOnRequest(),
+            Css::make('activity-timeline', __DIR__.'/../../../resources/views/livewire/app-panel/clients/activity-timeline.css')->loadedOnRequest(),
         ]);
     }
 }

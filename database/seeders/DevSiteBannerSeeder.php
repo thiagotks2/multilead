@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Websites\Enums\BannerType;
+use App\Modules\Websites\Models\Site;
 use App\Modules\Websites\Models\SiteBanner;
-use App\Modules\Websites\Models\SiteBannerPlace;
 use Illuminate\Database\Seeder;
 
 class DevSiteBannerSeeder extends Seeder
@@ -13,31 +14,25 @@ class DevSiteBannerSeeder extends Seeder
      */
     public function run(): void
     {
-        $places = SiteBannerPlace::all();
+        $sites = Site::all();
 
-        foreach ($places as $place) {
-            // Create 1-3 test banners per place for diversity
-            $numBanners = rand(1, 3);
+        if ($sites->isEmpty()) {
+            return;
+        }
 
-            for ($i = 1; $i <= $numBanners; $i++) {
-                $status = ($i === 1) ? 'Active' : (($i === 2) ? 'Backup' : 'Expired');
-                $isActive = ($status !== 'Expired');
+        foreach ($sites as $site) {
+            foreach (BannerType::cases() as $type) {
+                // Create 1-2 test banners per type for each site
+                $numBanners = rand(1, 2);
 
-                SiteBanner::withTrashed()->updateOrCreate(
-                    [
-                        'site_banner_place_id' => $place->id,
-                        'title' => "Banner {$i} - {$place->name} ({$status})",
-                    ],
-                    [
-                        'description' => "Test dummy banner for place: {$place->name}",
-                        'image_path' => "banners/placeholder-{$place->slug}-{$i}.jpg",
-                        'link_url' => 'https://multilead.com',
-                        'action_label' => 'Click Here',
-                        'display_until' => $isActive ? null : now()->subDays(rand(1, 10)),
-                        'deleted_at' => null,
-                        'updated_at' => now(),
-                    ]
-                );
+                for ($i = 1; $i <= $numBanners; $i++) {
+                    SiteBanner::factory()->create([
+                        'site_id' => $site->id,
+                        'type' => $type,
+                        'title' => "Banner {$i} - {$type->getLabel()} - {$site->name}",
+                        'image_path' => fake()->uuid().'.jpg',
+                    ]);
+                }
             }
         }
     }

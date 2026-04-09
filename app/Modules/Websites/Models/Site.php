@@ -78,9 +78,9 @@ class Site extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function bannerPlaces(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function bannerTypes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(SiteBannerPlace::class);
+        return $this->hasMany(SiteBannerType::class);
     }
 
     public function categories(): \Illuminate\Database\Eloquent\Relations\HasMany

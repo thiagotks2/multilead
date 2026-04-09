@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Resources\Websites;
 
+use App\Filament\App\Resources\Websites\BannerResource\BannerResource;
 use App\Filament\App\Resources\Websites\Pages\CreateWebsite;
 use App\Filament\App\Resources\Websites\Pages\EditWebsite;
 use App\Filament\App\Resources\Websites\Pages\ListWebsites;
@@ -43,6 +44,10 @@ class WebsiteResource extends Resource
                 ->icon('heroicon-o-tag')
                 ->url(SiteCategoryResource::getUrl('index', ['site' => $record]))
                 ->isActiveWhen(fn () => request()->routeIs('*.websites.site-categories.index')),
+            NavigationItem::make('Banners')
+                ->icon('heroicon-o-photo')
+                ->url(BannerResource::getUrl('index', ['site' => $record]))
+                ->isActiveWhen(fn () => request()->routeIs('*.websites.banner-resource.*')),
         ];
     }
 

@@ -20,17 +20,15 @@ class DatabaseSeeder extends Seeder
                 DevCompanySeeder::class,
                 DevUserSeeder::class,
                 DevSiteSeeder::class,
-                DevSiteBannerPlaceSeeder::class,
                 DevSiteBannerSeeder::class,
                 DevLeadSourceSeeder::class,
                 DevClientSeeder::class,
                 DevLeadSeeder::class,
                 DevBlogSeeder::class,
             ]);
-        }else{
+        } else {
             $this->call([
                 AdminSeeder::class,
-                SiteBannerPlaceSeeder::class,
             ]);
         }
     }
